@@ -1,0 +1,52 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.12.1/font/bootstrap-icons.min.css");
+
+.active
+{
+    color: #0d6efd !important;
+    border-bottom: 1px solid #0d6efd !important;
+}
+
+.nav-link:hover
+{
+    color: #0d6efd !important;
+    border-bottom: 1px solid #0d6efd !important;
+}
+
+.bg-gray
+{
+    background-color: #fafafa;
+
+}
+
+.bg-light
+{
+    background-color: white !important;
+}
+
+.input-error
+{
+    border: 1px solid #e74c3c !important; 
+    background-color: #fdecea !important;
+    color: #c0392b !important;
+    outline: none !important;
+}
+  
+.input-error:focus
+{
+    border-color: #c0392b !important;
+    box-shadow: 0 0 5px rgba(231, 76, 60, 0.5) !important;
+}
+
+.input-success 
+{
+    border: 1px solid #2ecc71 !important; 
+    background-color: #eafaf1 !important;
+    color: #27ae60 !important;
+    outline: none !important;
+}
+
+.input-success:focus 
+{
+    border-color: #27ae60 !important;
+    box-shadow: 0 0 5px rgba(46, 204, 113, 0.5) !important;
+}
