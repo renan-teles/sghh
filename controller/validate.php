@@ -11,17 +11,74 @@ function validateAction(string $currentAction, array $actionsNames): bool {
 }
 
 function filter_input_float(string $value): float {
-    if (is_null($value)) {
+    try{
+        $value = number_format(floatval($value), 2, ".",",");
+        return $value;
+    } catch(Exception $exc){
         return 0.0;
     }
-    $value = str_replace('.', '', $value);
-    $value = str_replace(',', '.', $value);
-    if (is_numeric($value)) {
-        return floatval($value);
-    }
-    return 0.0;
 }
 
+function validateCPF(string $cpf) {
+    if (strlen($cpf) != 11) {
+        return false;
+    }
+
+    if (preg_match('/^(\d)\1{10}$/', $cpf)) {
+        return false;
+    }
+
+    for ($t = 9; $t < 11; $t++) {
+        $soma = 0;
+        for ($c = 0; $c < $t; $c++) {
+            $soma += $cpf[$c] * (($t + 1) - $c);
+        }
+        $digito = ((10 * $soma) % 11) % 10;
+        if ($cpf[$t] != $digito) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+function validateTelephone(string $telefone): bool {
+    if (!in_array(strlen($telefone), [10, 11])) {
+        return false;
+    }
+
+    if (!ctype_digit($telefone)) {
+        return false;
+    }
+
+    if (strlen($telefone) == 11 && $telefone[2] !== '9') {
+        return false;
+    }
+
+    if (strlen($telefone) == 10 && !in_array($telefone[2], ['2', '3', '4', '5'])) {
+        return false;
+    }
+ 
+    return true;
+}
+
+function validateName(string $name): bool {
+    return preg_match("/^[A-Za-zÀ-ÿ\s]{3,}$/", $name);
+}
+
+function validateEmail(string $email): bool {
+    return filter_var($email, FILTER_VALIDATE_EMAIL)? true : false;
+}
+
+function validateDate(string $date): bool {
+    if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)) {
+        return false;
+    }
+
+    [$year, $month, $day] = explode('-', $date);
+
+    return checkdate((int)$month, (int)$day, (int)$year);
+}
 
 // function validateLogin(): void
 // {

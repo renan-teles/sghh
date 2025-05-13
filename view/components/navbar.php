@@ -17,7 +17,7 @@ function showNavbar($active): void {
                         <a class='nav-link ". ($active === "hospedagens"? "active" : "") ."' href='./accommodations.php'><i class='bi- me-1'></i>Hospedagens</a>
                     </li>
                     <li class='nav-item me-md-2 mt-1 mt-md-0'>
-                        <a class='nav-link ". ($active === "hospedes"? "active" : "") ."' href='./guests.php'><i class='bi- me-1'></i>Hóspedes</a>
+                        <a class='nav-link ". ($active === "hospedes"? "active" : "") ."' href='./guests.php'><i class='bi-people me-1'></i>Hóspedes</a>
                     </li>
                     <li class='nav-item me-md-2 mb-3 mb-md-0'>
                         <a class='nav-link ". ($active === "quartos"? "active" : "") ."' href='./rooms.php'><i class='bi-building me-1'></i>Quartos</a>

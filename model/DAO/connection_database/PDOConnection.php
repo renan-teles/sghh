@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . "./interface/DatabaseConnection.php";
+require_once __DIR__ . "/interface/DatabaseConnection.php";
 
 class PDOConnection implements DatabaseConnection {
     private string $dns;

@@ -372,3 +372,42 @@ filterAvailability.addEventListener('click', () => {
 
     divFiltersSearch.appendChild(wrapper);
 });
+
+//Event BTN Delete Guest
+const btnDeleteUser = document.querySelector('#btnDelete');
+
+let intervalo = null;
+let segundos = 5;
+
+const atualizarCronometro = () => {
+    if (segundos > 0) 
+    {
+        segundos--;
+        btnDeleteUser.innerHTML = `Excluir (${segundos})`;
+    }
+    if (segundos === 0) 
+    {
+        clearInterval(intervalo);
+        intervalo = null;
+        btnDeleteUser.innerHTML = `Excluir`;
+        btnDeleteUser.classList.remove('disabled'); 
+        btnDeleteUser.addEventListener('click', () => {
+            btnDeleteUser.innerHTML = "<div class='spinner-border spinner-border-sm me-2' role='status'><span class='visually-hidden'></span></div>Excluindo...";
+        });
+    }
+}
+
+const iniciar = () => {
+    segundos = 5;
+    btnDeleteUser.innerHTML = `Excluir (${segundos})`;
+    btnDeleteUser.classList.add('disabled');
+    if (intervalo === null) 
+    {
+        intervalo = setInterval(atualizarCronometro, 1000);
+    }
+}
+
+const btns = document.querySelectorAll('.btnOpenModalDelete');
+btns.forEach((el) => {
+    el.addEventListener('click', iniciar);
+});

@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . "./ClassDAO.php";
+require_once __DIR__ . "/ClassDAO.php";
 
 class RoomDAO extends ClassDAO {
     private Room $room;
@@ -10,13 +10,13 @@ class RoomDAO extends ClassDAO {
         parent::__construct($databaseConnection);
     }
 
-    public function getRoom() {
+    public function getRoom(): Room{
         return $this->room;
     }
 
     public function register(): bool {
         try {
-            $typeRoom = $this->getRoom()->getType();
+            $idTypeRoom = $this->getRoom()->getType()->getId();
             $number = $this->getRoom()->getNumber();
             $floor = $this->getRoom()->getFloor();
             $capacity = $this->getRoom()->getCapacity();
@@ -25,9 +25,9 @@ class RoomDAO extends ClassDAO {
             $sql = "INSERT INTO 
                         rooms (id_type_room, number, floor, capacity, daily_price) 
                     VALUES 
-                        (:typeRoom, :number, :floor, :capacity, :dailyPrice)";
+                        (:idTypeRoom, :number, :floor, :capacity, :dailyPrice)";
             $query = $pdo->prepare($sql);
-            $query->bindParam(':typeRoom', $typeRoom);
+            $query->bindParam(':idTypeRoom', $idTypeRoom);
             $query->bindParam(':number', $number);
             $query->bindParam(':floor', $floor);
             $query->bindParam(':capacity', $capacity);
@@ -42,7 +42,7 @@ class RoomDAO extends ClassDAO {
     public function edit(): bool {
         try {
             $id = $this->getRoom()->getId();
-            $typeRoom = $this->getRoom()->getType();
+            $idTypeRoom = $this->getRoom()->getType()->getId();
             $number = $this->getRoom()->getNumber();
             $floor = $this->getRoom()->getFloor();
             $capacity = $this->getRoom()->getCapacity();
@@ -52,7 +52,7 @@ class RoomDAO extends ClassDAO {
             $sql = "UPDATE 
                         rooms 
                     SET 
-                        id_type_room = :typeRoom, 
+                        id_type_room = :idTypeRoom, 
                         number = :number,
                         floor = :floor,
                         capacity = :capacity,
@@ -61,7 +61,7 @@ class RoomDAO extends ClassDAO {
         
             $query = $pdo->prepare($sql);
             $query->bindParam(':id', $id);
-            $query->bindParam(':typeRoom', $typeRoom);
+            $query->bindParam(':idTypeRoom', $idTypeRoom);
             $query->bindParam(':number', $number);
             $query->bindParam(':floor', $floor);
             $query->bindParam(':capacity', $capacity);
@@ -143,8 +143,10 @@ class RoomDAO extends ClassDAO {
         }
     }
 
-    public function searchByNumber(int $number) {
+    public function searchByNumber(): array|bool{
         try {        
+            $number = $this->getRoom()->getNumber();
+
             $pdo = $this->getDatabaseConnection()->getDatabaseConnection();
     
             $sql = "SELECT 

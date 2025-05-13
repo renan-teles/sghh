@@ -18,11 +18,14 @@ class EditRoom implements Action {
         if($room->getCapacity() <= 0) {
             throw new Exception("Capacidade do quarto inválida!");
         }
-        if($room->getType() <= 0) {
+        if($room->getType()->getId() <= 0) {
             throw new Exception("Tipo de quarto inválido!");
         }
         if($room->getDailyPrice() <= 0.0) {
             throw new Exception("Preço da diária de quarto inválida!");
+        }
+        if($room->getIsAvailable() < 0 || $room->getIsAvailable() > 1) {
+            throw new Exception("Disponibilidade de quarto inválida!");
         }
 
         if(!$roomDAO->edit()) {
@@ -30,6 +33,6 @@ class EditRoom implements Action {
         }
 
         $_SESSION['msg-success'] = "Quarto editado com sucesso!"; 
-        header("Location: ../view/pages/rooms.php?n=" . urlencode(json_encode(["n" => $room->getNumber()])));
+        header("Location: ../view/pages/rooms.php?act=search-room&n=" . urlencode(json_encode(["n" => $room->getNumber()])));
     }
 }
