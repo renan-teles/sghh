@@ -12,4 +12,8 @@ abstract class ClassDAO {
     }
 
     public function register(): bool {}
+    
+    public function edit(): bool {}
+    
+    public function delete(): bool {}
 }

@@ -15,18 +15,21 @@ class RegisterRoom implements Action {
         if($room->getCapacity() <= 0) {
             throw new Exception("Capacidade do quarto inválida!");
         }
-        if($room->getType() <= 0) {
+        if($room->getType()->getId() <= 0) {
             throw new Exception("Tipo de quarto inválido!");
         }
         if($room->getDailyPrice() <= 0.0) {
             throw new Exception("Preço da diária de quarto inválida!");
         }
-
-        if(!$roomDAO->register()) {
-            throw new Exception("Não foi possível registrar o quarto.");
+        if($room->getIsAvailable() < 0 || $room->getIsAvailable() > 1) {
+            throw new Exception("Disponibilidade de quarto inválida!");
         }
 
-        $_SESSION['msg-success'] = "Quarto registrado com sucesso!"; 
-        header("Location: ../view/pages/rooms.php?n=" . urlencode(json_encode(["n" => $room->getNumber()])));
+        if(!$roomDAO->register()) {
+            throw new Exception("Não foi possível cadastrar o quarto.");
+        }
+
+        $_SESSION['msg-success'] = "Quarto cadastrado com sucesso!"; 
+        header("Location: ../view/pages/rooms.php?act=search-room&n=" . urlencode(json_encode(["n" => $room->getNumber()])));
     }
 }

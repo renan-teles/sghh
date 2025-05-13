@@ -1,34 +1,19 @@
 <?php
     session_start();
-    require_once __DIR__ . "/../components/navbar.php";
-    require_once __DIR__ . "/../components/message.php"; 
-    require_once __DIR__ . "/../components/trRoom.php"; 
-    
-    //ConnectionToDatabase
-    require_once __DIR__ . "/../../model/DAO/connection_database/connectionToDatabase.php";
-    
-    //Rooms
-    $rooms = null;
 
-    //Get Action
-    $action = isset($_GET['act'])? $_GET['act'] : '';
-   
-    //Custom Search Action
-    if($action === "custom-search-rooms") {
-        require_once __DIR__ . "/../services/rooms/customSearchRooms.php";
-    }
-
-    //Search Room Action
-    if(isset($_GET['n'])){
-        require_once __DIR__ . "/../services/rooms/searchRoom.php";
-    }
+    //Components
+    include_once __DIR__ . "/../components/navbar.php";
+    include_once __DIR__ . "/../components/message.php"; 
+    
+    //Search Data Controller
+    require_once __DIR__ . "/../searchDataControllers/rooms/controllerDataSearchRooms.php";
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SGHH - Gestão Quartos</title>
+    <title>SGHH - Gestão de Quartos</title>
     <link rel="stylesheet" href="../assets/css/css_bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
@@ -38,7 +23,7 @@
         <div class="col-12 shadow-sm rounded p-4 bg-light mb-5">
             <div class="row mb-3">
                 <div class="col-12 col-md text-center text-md-start">
-                    <h2><i class="bi-building-gear me-2"></i>Gestão de Quartos</h2>
+                    <h2><i class="bi-building me-2"></i>Gestão de Quartos</h2>
                 </div>
                 <div class="col-12 col-md text-center text-md-end mt-2 mt-md-0">
                     <button class="btn btn-primary" type="button" data-bs-target="#modalAddRoom" data-bs-toggle="modal">
@@ -55,7 +40,7 @@
                             <i class='bi-search me-1'></i>Pesquisa de Quartos
                         </button>
                     </h2>
-                    <div id="collapseTwo" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                    <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                         <div class="accordion-body">
                             <form action="./rooms.php?act=custom-search-rooms" method="POST" id="formCustomSearchRooms">
                                 <div class="row">
@@ -104,9 +89,22 @@
                     </thead>
                     <tbody>
                         <?php
-                            if(isset($rooms) && $rooms){
+                            if($rooms){
                                 foreach ($rooms as $r) {
-                                   showTrRoom($r);
+                        ?>
+                            <tr id='tr_<?=$r["id"];?>'>
+                                <th scope='row' id='numberRoom'><?=$r["number"];?></th>
+                                <td id='typeRoom'><?=$r["type"];?></td>
+                                <td id='capacityRoom'><?=$r["capacity"];?></td>
+                                <td><span id='dailyPriceRoom' class="me-1"><?= number_format($r["daily_price"], 2, ",", "."); ?></span>R$</td>
+                                <td id='isAvailable'><?= $r["is_available"] === "1"? "Disponível" : "Indisponível";?></td>
+                                <td id='floorRoom'><?=$r["floor"];?></td>
+                                <td>
+                                    <button id='tr_<?=$r["id"];?>' class='btn btn-secondary btn-sm btn btnOpenModalEdit my-1 my-sm-0' type='button' data-bs-target='#modalEditRoom' data-bs-toggle='modal'><i id='tr_<?=$r["id"];?>' class='bi-pencil-fill'></i></button>
+                                    <button id='tr_<?=$r["id"];?>' class='btn btn-danger btn-sm btnOpenModalDelete my-1 my-sm-0' type='button' data-bs-target='#modalDeleteRoom' data-bs-toggle='modal'><i id='tr_<?=$r["id"];?>' class='bi-trash-fill'></i></button>
+                                </td>
+                            </tr>
+                        <?php
                                 }
                             } else{
                                 echo "<h5 class='mb-3'>Nenhum quarto pesquisado ou encontrado.</h5>";
@@ -124,7 +122,7 @@
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-4" id="exampleModalLabel"><i class="bi-building-fill-add me-1"></i>Cadastro de Quarto</h1>
+                    <h1 class="modal-title fs-4" id="exampleModalLabel"><i class="bi-building-fill-add me-1"></i>Cadastrar Quarto</h1>
                     <button type="button" class="btn-close" id="btnClose1" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -169,7 +167,7 @@
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-4" id="exampleModalLabel"><i class="bi-building-fill-gear me-1"></i>Editar de Quarto</h1>
+                    <h1 class="modal-title fs-4" id="exampleModalLabel"><i class="bi-building-fill-gear me-1"></i>Editar Quarto</h1>
                     <button type="button" class="btn-close" id="btnClose2" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -221,7 +219,7 @@
                     <button type="button" class="btn" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
                     <form id="formDeleteRoom" action="../../controller/controllerRoom.php?act=delete-room" method="POST">
                         <input type="hidden" id="roomId" name="roomId">
-                        <button class="btn btn-danger" type="submit">Excluir</button>
+                        <button id="btnDelete" class="btn btn-danger" type="submit">Excluir</button>
                     </form>
                 </div>
             </div>

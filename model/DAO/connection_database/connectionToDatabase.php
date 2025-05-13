@@ -1,7 +1,7 @@
 <?php
-require_once __DIR__ . './hostdb.php';
-require_once __DIR__ . './PDOConnection.php';
-require_once __DIR__ . './ConnectDB.php';
+require_once __DIR__ . '/hostdb.php';
+require_once __DIR__ . '/PDOConnection.php';
+require_once __DIR__ . '/ConnectDB.php';
 
 //PDO Connection
 $dsn = "mysql:host=$databaseHost; dbname=$databaseName";
