@@ -2,19 +2,22 @@
 function showNavbar($active): void {
     echo (
         "
-        <nav class='navbar navbar-expand-md shadow-sm bg-light'>
-            <div class='container-md'>
-                <h3 class='text-primary'>SGHH</h3>
+        <nav class='navbar navbar-expand-md shadow-sm bg-light sticky-top'>
+            <div class='container-lg'>
+               
+                <a class='navbar-brand text-brown' href='./home.php'><span class='h3'>SGHH</span></a>
+
                 <button class='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-target='#navbarNav' aria-controls='navbarNav' aria-expanded='false' aria-label='Toggle navigation'>
                     <span class='navbar-toggler-icon'></span>
                 </button>
-            <div class='collapse navbar-collapse' id='navbarNav'>
+
+                <div class='collapse navbar-collapse' id='navbarNav'>
                 <ul class='navbar-nav ms-auto'>
                     <li class='nav-item me-md-2 mt-1 mt-md-0'>
-                        <a class='nav-link ". ($active === "home"? "active" : "") ."' href='./home.php'><i class='bi- me-1'></i>Home</a>
+                        <a class='nav-link ". ($active === "home"? "active" : "") ."' href='./home.php'><i class='bi-house me-1'></i>Página Inicial</a>
                     </li>
                     <li class='nav-item me-md-2 mt-1 mt-md-0'>
-                        <a class='nav-link ". ($active === "hospedagens"? "active" : "") ."' href='./accommodations.php'><i class='bi- me-1'></i>Hospedagens</a>
+                        <a class='nav-link ". ($active === "hospedagens"? "active" : "") ."' href='./accommodations.php'><i class='bi-calendar-week me-1'></i>Hospedagens</a>
                     </li>
                     <li class='nav-item me-md-2 mt-1 mt-md-0'>
                         <a class='nav-link ". ($active === "hospedes"? "active" : "") ."' href='./guests.php'><i class='bi-people me-1'></i>Hóspedes</a>

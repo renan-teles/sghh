@@ -17,24 +17,22 @@ $rooms = null;
 $action = $_GET['act'] ?? '';
 
 //Names Actions
-$actionsNames = 
-[
+$actionsNames = [
     'custom-search-rooms',
     'search-room'    
 ];
 
 //Validates
 if($action === $actionsNames[0]){
+    //Valid Params
     $columns = array_map(function ($value) {
         $value = trim($value);
-        $isValid = filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        return $isValid && in_array($isValid, ["number", "is_available", "id_type_room", "daily_price", "capacity"])?   $isValid : "";
+        return in_array(filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS), ["number", "is_available", "id_type_room", "daily_price", "capacity"])? $value : "";
     }, $_POST['columns'] ?? []);
 
     $conditions = array_map(function ($value) {
         $value = trim($value);
-        $isValid = filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        return $isValid && in_array($isValid, ["lt", "gt", "lte", "gte", "eq"])? $isValid : "";
+        return in_array(filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS), ["lt", "gt", "lte", "gte", "eq"])? $value : "";
     }, $_POST['conditions'] ?? []);
 
     $complements = array_map(function ($value) {
@@ -43,19 +41,23 @@ if($action === $actionsNames[0]){
             $value = str_replace('.', '', $value); 
             $value = str_replace(',', '.', $value);
         }
-        $isValid = filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        return $isValid || $isValid === "0"? $isValid : "";
+        $value = filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        return $value || $value === "0"? $value : "";
     }, $_POST['complements'] ?? []);
 }
 
-if($action === $actionsNames[1]){
+if ($action === $actionsNames[1]) {
     $json = filter_input(INPUT_GET, 'n', FILTER_UNSAFE_RAW);
-    $numberRoom = $json ? json_decode($json, true) : [];
+    $infoRoom = json_decode($json ?? '', true) ?? [];
+
+    $numberRoom = isset($infoRoom['n']) ? filter_var($infoRoom['n'], FILTER_VALIDATE_INT) : 0;
+    $numberRoom = $numberRoom ?: 0;
 }
 
-//Create Objects 
-$typeRoom = new TypeRoom(0,"");
-$room = new Room(0, $numberRoom['n'] ?? 0, $typeRoom, 0, 0, 0, 0);
+// Criar objetos
+$typeRoom = new TypeRoom(0, "");
+$room = new Room(0, $numberRoom ?? 0, $typeRoom, 0, 0, 0, 0);
+
 
 //Create DAO Object
 $roomDAO = new RoomDAO($room, $connectDB);
@@ -67,7 +69,7 @@ $actions = array(
 );
 
 //Execute Action
-if($action) {
+if($action && in_array($action, $actionsNames)) {
     try {
         $rooms = $actions[$action]->execute($roomDAO);
 

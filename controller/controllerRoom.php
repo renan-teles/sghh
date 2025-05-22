@@ -17,8 +17,7 @@ require_once __DIR__ . '/validate.php';
 $action = $_GET['act'] ?? '';
 
 //Names Actions
-$actionsNames = 
-[
+$actionsNames = [
     'delete-room',
     'edit-room',
     'register-room'
@@ -56,19 +55,18 @@ $room = new Room(0, $numberRoom, $typeRoom, $dailyPriceRoom, $isAvailable, $capa
 //Set ID
 if($action !== 'register-room'){
     $idRoom = filter_input(INPUT_POST, 'roomId', FILTER_VALIDATE_INT);
-    $idRoom = $idRoom ? $idRoom : 0;
-    $room->setId($idRoom);
+    $room->setId($idRoom ?: 0);
 }
 
 //Create DAO Object
 $roomDAO = new RoomDAO($room, $connectDB);
 
 //Actions
-$actions = array(
+$actions = [
     $actionsNames[0] => new DeleteRoom(),
     $actionsNames[1] => new EditRoom(),
     $actionsNames[2] => new RegisterRoom()
-);
+];
 
 //Execute Action
 try{

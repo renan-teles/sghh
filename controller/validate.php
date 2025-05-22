@@ -13,7 +13,7 @@ function validateAction(string $currentAction, array $actionsNames): bool {
 function filter_input_float(string $value): float {
     try{
         $value = number_format(floatval($value), 2, ".",",");
-        return $value;
+        return floatval($value);
     } catch(Exception $exc){
         return 0.0;
     }
@@ -66,10 +66,6 @@ function validateName(string $name): bool {
     return preg_match("/^[A-Za-zÀ-ÿ\s]{3,}$/", $name);
 }
 
-function validateEmail(string $email): bool {
-    return filter_var($email, FILTER_VALIDATE_EMAIL)? true : false;
-}
-
 function validateDate(string $date): bool {
     if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)) {
         return false;
@@ -80,11 +76,9 @@ function validateDate(string $date): bool {
     return checkdate((int)$month, (int)$day, (int)$year);
 }
 
-// function validateLogin(): void
-// {
-//     if(!isset($_SESSION['userData']))
-//     {
-//         header('Location: ../../index.php');
-//         exit;
-//     }
-// }
+function validateLogin(): void {
+    if(!isset($_SESSION['receptionistData'])){
+        header('Location: ../../index.php');
+        exit;
+    }
+}

@@ -12,7 +12,7 @@ class EditGuest implements Action {
         if(!validateName($guest->getName())) {
             throw new Exception("Nome inválido!");
         }
-        if(!validateEmail($guest->getEmail())) {
+        if(!filter_var($guest->getEmail(), FILTER_VALIDATE_EMAIL)) {
             throw new Exception("Email inválido!");
         }
         if(!validateCPF($guest->getCpf())) {

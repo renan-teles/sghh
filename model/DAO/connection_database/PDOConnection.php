@@ -32,7 +32,9 @@ class PDOConnection implements DatabaseConnection {
 
     public function connect(): void {
         try {
-            $pdo = new PDO($this->getDns(), $this->getUser(), $this->getPass());
+            $pdo = new PDO($this->getDns(), $this->getUser(), $this->getPass(), [
+                PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4"
+            ]);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->pdo = $pdo;
         } catch (PDOException $exc) {

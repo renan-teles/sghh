@@ -3,7 +3,7 @@
 require_once __DIR__ . "/ClassDAO.php";
 
 class GuestDAO extends ClassDAO {
-    private guest $guest;
+    private Guest $guest;
    
     public function __construct(Guest $guest, DatabaseConnection $databaseConnection) {
         $this->guest = $guest;
@@ -56,7 +56,6 @@ class GuestDAO extends ClassDAO {
             $telephone = $this->getGuest()->getTelephone();
             $dateBirth = $this->getGuest()->getDateBirth();
 
-
             $pdo = $this->getDatabaseConnection()->getDatabaseConnection();
         
             $sql = "UPDATE 
@@ -106,7 +105,7 @@ class GuestDAO extends ClassDAO {
         }
     }
 
-    public function verifyExist(): array|bool {
+    public function checkExistence(): array|bool {
         try {
             $name = $this->getGuest()->getName();
             $email = $this->getGuest()->getEmail();
@@ -144,37 +143,29 @@ class GuestDAO extends ClassDAO {
     public function customSearch(array $columns, array $conditions, array $complements): array|bool {
         try {
             $pdo = $this->getDatabaseConnection()->getDatabaseConnection();
-    
-            $sql = "SELECT * FROM guests";
-    
+        
             $conditionsSymbols = [
-                "la" => "like",
                 "eq" => "="
             ];
     
             $whereClauses = [];
-            $params = [];
+            $values = [];
     
             for ($i = 0; $i < count($columns); $i++) {
                 $column = $columns[$i];
                 $operator = $conditionsSymbols[$conditions[$i]];
-
-                $whereClauses[] = "$column $operator :complement$i";
-                $params[":complement$i"] = $complements[$i];
+               
+                $whereClauses[] = "$column $operator ?";
+                $values[] = $complements[$i];
             }
     
-            if ($whereClauses) {
-                $sql .= " WHERE " . implode(' AND ', $whereClauses);
-            }
-
+            $whereSQL = count($whereClauses) ? "WHERE " . implode(" AND ", $whereClauses) : "";
+    
+            $sql = "SELECT * FROM guests $whereSQL";
+    
             $query = $pdo->prepare($sql);
-    
-            foreach ($params as $placeholder => $value) {
-                $query->bindValue($placeholder, $value);
-            }
-    
-            $query->execute();
-    
+            $query->execute($values);
+            
             $result = $query->fetchAll(PDO::FETCH_ASSOC);
     
             return $result ?: [];

@@ -17,8 +17,7 @@ $guests = null;
 $action = $_GET['act'] ?? '';
 
 //Names Actions
-$actionsNames = 
-[
+$actionsNames = [
     'custom-search-guests',
     'search-guest'    
 ];
@@ -27,24 +26,17 @@ $actionsNames =
 if($action === $actionsNames[0]){
     $columns = array_map(function ($value) {
         $value = trim($value);
-        $isValid = filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        return $isValid && in_array($isValid, ["name", "email", "cpf", "cpf_responsible", "telephone"])? $isValid : "";
+        return in_array(filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS), ["name", "email", "cpf", "cpf_responsible", "telephone"])? $value : "";
     }, $_POST['columns'] ?? []);
 
     $conditions = array_map(function ($value) {
         $value = trim($value);
-        $isValid = filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        return $isValid && in_array($isValid, ["eq"])? $isValid : "";
+        return in_array(filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS),  ["eq"])? $value : "";
     }, $_POST['conditions'] ?? []);
 
     $complements = array_map(function ($value) {
         $value = trim($value);
-
         $value = filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-
-        if(!$value) {
-            return "";
-        }
 
         if (strpos($value, '(') !== false && strpos($value,')') !== false && strpos($value, '-') !== false){
             $value = preg_replace('/\D/', '', $value);
@@ -60,8 +52,8 @@ if($action === $actionsNames[0]){
             }
         }
         
-        if (strpos($value, '.') !== false){
-            if(!validateEmail($value)){
+        if (strpos($value, '.') !== false && strpos($value, '@') !== false){
+            if(!filter_var($value, FILTER_VALIDATE_EMAIL)){
                 return "";
             }
         }
@@ -72,11 +64,13 @@ if($action === $actionsNames[0]){
 
 if($action === $actionsNames[1]){
     $json = filter_input(INPUT_GET, 'e', FILTER_UNSAFE_RAW);
-    $emailGuest = $json ? json_decode($json, true) : [];
+    $infoGuest = $json ? json_decode($json, true) : [];
+
+    $emailGuest = isset($infoGuest["e"]) ? filter_var($infoGuest["e"], FILTER_VALIDATE_EMAIL) : "";
 }
 
 //Create Objects 
-$guest = new Guest(0, "", $emailGuest["e"] ?? "", "", "", "", "");
+$guest = new Guest(0, "", $emailGuest ?? "", "", "", "", "");
 
 //Create DAO Object
 $guestDAO = new GuestDAO($guest, $connectDB);
@@ -88,7 +82,7 @@ $actions = array(
 );
 
 //Execute Action
-if($action) {
+if($action && in_array($action, $actionsNames)) {
     try {
         $guests = $actions[$action]->execute($guestDAO);
 
