@@ -1,6 +1,5 @@
-import { validateName, validateDate, validate, validateSelect, validateTelephone, validateEmail, validateCPF, setStatusInput } from "./validate.js";
+import { validateName, validateDate, defaultValidate, validateSelect, validateTelephone, validateEmail, validateCPF, setStatusInput } from "./validate.js";
 
-//Functions
 const validateCPFInput = (input) => {
     input.addEventListener('input', (e) => {
         let value = e.target.value.replace(/\D/g, '');
@@ -29,36 +28,19 @@ const validateTelephoneInput = (input) => {
     });
 }
 
-const ValidateDateInput = (input, form) => {
+const ValidateDateInput = (input, inputCpfResponsible) => {
     input.addEventListener('input', () => {
         setStatusInput(validateDate(input.value), input);
-        
-        const divContainCpfResponsableGuest = form.querySelector("#divContainCpfResponsableGuest");
-        const divCpfResponsable = form.querySelector("#divCpfResponsableGuest");
 
-        let idade = new Date().getFullYear() - input.value.split("-")[0];
-
-        if(idade < 18 && !divCpfResponsable){
-            const wrapper = document.createElement('div');
-            wrapper.id = "divCpfResponsableGuest"; 
-            wrapper.classList.add("col-12", "mb-3");
-    
-            wrapper.innerHTML = `
-                <label for="cpf_responsable_guest">CPF do Responsável:</label>
-                <input type="text" name="cpf_responsable_guest" id="cpf_responsable_guest" placeholder="Digite o CPF do responsável..." class="form-control">
-            `;
-           
-            const inputCpfResponsable = wrapper.querySelector("#cpf_responsable_guest");
-            //setStatusInput(validateCPF(inputCpfResponsable.value), inputCpfResponsable);
-            validateCPFInput(inputCpfResponsable);
-
-            divContainCpfResponsableGuest.classList.remove("d-none");
-            divContainCpfResponsableGuest.appendChild(wrapper);
-        } 
-        
-        if(idade > 18 && divCpfResponsable){
-            divCpfResponsable.remove();
-            divContainCpfResponsableGuest.classList.add("d-none");
+        let age = Number(new Date().getFullYear()) - Number(input.value.split("-")[0]);
+       
+        if(age > 18){
+            inputCpfResponsible.classList.remove('input-error');
+            inputCpfResponsible.classList.remove('input-success');
+            inputCpfResponsible.value = '';
+            inputCpfResponsible.disabled = true;
+        } else{
+            inputCpfResponsible.disabled = false;
         }
     });
 }
@@ -78,8 +60,8 @@ const validateComplements = (selects) => {
     let aproved = true;
     selects.forEach((s) => {
         if(s.id === "complementName"){
-            s.addEventListener('input', () => setStatusInput(validate(s), s));
-            if(!setStatusInput(validate(s), s)){
+            s.addEventListener('input', () => setStatusInput(defaultValidate(s), s));
+            if(!setStatusInput(defaultValidate(s), s)){
                 aproved = false;
             }
         }
@@ -92,18 +74,21 @@ const validateComplements = (selects) => {
         }
         
         if(s.id === "complementCPF"){
+            setStatusInput(validateCPF(s.value), s);
             if(!validateCPF(s.value)){
                 aproved = false;
             }
         }
         
         if(s.id === "complementCPFResponsible"){
+            setStatusInput(validateCPF(s.value), s);
             if(!validateCPF(s.value)){
                 aproved = false;
             }
         }
         
         if(s.id === "complementTelephone"){
+            setStatusInput(validateTelephone(s.value), s);
             if(!validateTelephone(s.value)){
                 aproved = false;
             }
@@ -112,192 +97,34 @@ const validateComplements = (selects) => {
     return aproved;
 }
 
-//Validate Form Register
-formAddGuest.addEventListener('submit', (evt) => {
-    evt.preventDefault();
-
-    const divCpfResponsable = formAddGuest.querySelector("#divCpfResponsableGuest");
-
-    setStatusInput(validateName(formAddGuest.name_guest), formAddGuest.name_guest);
-    setStatusInput(validateEmail(formAddGuest.email_guest), formAddGuest.email_guest);
-    setStatusInput(validateCPF(formAddGuest.cpf_guest.value), formAddGuest.cpf_guest);
-    setStatusInput(validateDate(formAddGuest.date_birth_guest.value), formAddGuest.date_birth_guest);
-    setStatusInput(validateTelephone(formAddGuest.telephone_guest.value), formAddGuest.telephone_guest);
-    if(divCpfResponsable)
-        setStatusInput(validateCPF(formAddGuest.cpf_responsable_guest.value), formAddGuest.cpf_responsable_guest);
-    
-    if (
-        validateName(formAddGuest.name_guest) 
-        && validateEmail(formAddGuest.email_guest) 
-        && validateCPF(formAddGuest.cpf_guest.value)
-        && validateTelephone(formAddGuest.telephone_guest.value)
-        && validateDate(formAddGuest.date_birth_guest.value)
-    ) 
-    { 
-        if(divCpfResponsable){
-            if(!validateCPF(formAddGuest.cpf_responsable_guest.value)){
-                return false;
-            }
-        }
-        formAddGuest.submit();
-        formAddGuest.btn_submit.disabled = true;
-        formAddGuest.btn_submit.innerHTML = "<div class='spinner-border spinner-border-sm me-2' role='status'><span class='visually-hidden'></span></div>Cadastrando...";
-    }
-});
-
-//Events Inputs
-formAddGuest.name_guest.addEventListener('input', () => setStatusInput(validateName(formAddGuest.name_guest), formAddGuest.name_guest));
-formAddGuest.email_guest.addEventListener('input', () => setStatusInput(validateEmail(formAddGuest.email_guest), formAddGuest.email_guest));
-validateCPFInput(formAddGuest.cpf_guest);
-validateTelephoneInput(formAddGuest.telephone_guest);
-ValidateDateInput(formAddGuest.date_birth_guest, formAddGuest);
-
-btnClose1.addEventListener('click', () => {
-    const inputs = [formAddGuest.name_guest, formAddGuest.email_guest,formAddGuest.cpf_guest, formAddGuest.telephone_guest, formAddGuest.date_birth_guest];
-    
-    for(let i=0; i<inputs.length; i++){
-        inputs[i].value = '';    
-        inputs[i].classList.remove('input-error');
-        inputs[i].classList.remove('input-success');
-    }
-    
-    const divCpfResponsable = formAddGuest.querySelector("#divCpfResponsableGuest");
-    const divContainCpfResponsableGuest = formAddGuest.querySelector("#divContainCpfResponsableGuest");
-    
-    if(divCpfResponsable){
-        divCpfResponsable.remove();
-        divContainCpfResponsableGuest.classList.add("d-none");
-    }
-});
-
-//Validate Form Register
-formEditGuest.addEventListener('submit', (evt) => {
-    evt.preventDefault();
-
-    const divCpfResponsable = formEditGuest.querySelector("#divCpfResponsableGuest");
-
-    setStatusInput(validateName(formEditGuest.name_guest), formEditGuest.name_guest);
-    setStatusInput(validateEmail(formEditGuest.email_guest), formEditGuest.email_guest);
-    setStatusInput(validateCPF(formEditGuest.cpf_guest.value), formEditGuest.cpf_guest);
-    setStatusInput(validateDate(formEditGuest.date_birth_guest.value), formEditGuest.date_birth_guest);
-    setStatusInput(validateTelephone(formEditGuest.telephone_guest.value), formEditGuest.telephone_guest);
-    if(divCpfResponsable)
-        setStatusInput(validateCPF(formEditGuest.cpf_responsable_guest.value), formEditGuest.cpf_responsable_guest);
-    
-    if (
-        validateName(formEditGuest.name_guest) 
-        && validateEmail(formEditGuest.email_guest) 
-        && validateCPF(formEditGuest.cpf_guest.value)
-        && validateTelephone(formEditGuest.telephone_guest.value)
-        && validateDate(formEditGuest.date_birth_guest.value)
-    ) 
-    { 
-        if(divCpfResponsable){
-            if(!validateCPF(formEditGuest.cpf_responsable_guest.value)){
-                return false;
-            }
-        }
-        formEditGuest.submit();
-        formEditGuest.btn_submit.disabled = true;
-        formEditGuest.btn_submit.innerHTML = "<div class='spinner-border spinner-border-sm me-2' role='status'><span class='visually-hidden'></span></div>Editando...";
-    }
-});
-
-//Events Inputs
-formEditGuest.name_guest.addEventListener('input', () => setStatusInput(validateName(formEditGuest.name_guest), formEditGuest.name_guest));
-formEditGuest.email_guest.addEventListener('input', () => setStatusInput(validateEmail(formEditGuest.email_guest), formEditGuest.email_guest));
-validateCPFInput(formEditGuest.cpf_guest);
-validateTelephoneInput(formEditGuest.telephone_guest);
-ValidateDateInput(formEditGuest.date_birth_guest, formEditGuest);
-
-btnClose2.addEventListener('click', () => {
-    const inputs = [formEditGuest.name_guest, formEditGuest.email_guest,formEditGuest.cpf_guest, formEditGuest.telephone_guest, formEditGuest.date_birth_guest];
-    
-    for(let i=0; i<inputs.length; i++){
-        inputs[i].value = '';    
-        inputs[i].classList.remove('input-error');
-        inputs[i].classList.remove('input-success');
-    }
-    
-    const divCpfResponsable = formEditGuest.querySelector("#divCpfResponsableGuest");
-    const divContainCpfResponsableGuest = formEditGuest.querySelector("#divContainCpfResponsableGuest");
-    
-    if(divCpfResponsable){
-        divCpfResponsable.remove();
-        divContainCpfResponsableGuest.classList.add("d-none");
-    }
-});
-
-//Add Informations on Modal Edit Guest
-const btnsOpenModalEdit = [...document.querySelectorAll('.btnOpenModalEdit')];
-if(btnsOpenModalEdit){
-    btnsOpenModalEdit.forEach(btn => {
-        btn.addEventListener('click', (evt) => {
-            const idFull = evt.target.id;
-            
-            const tr = document.querySelector(`#${idFull}`);
-            
-            const inputs = [formEditGuest.name_guest, formEditGuest.email_guest, formEditGuest.cpf_guest, formEditGuest.telephone_guest, formEditGuest.date_birth_guest];
-            const idsTds = ['#nameGuest',  '#emailGuest', '#cpfGuest', '#telephoneGuest', '#dateBirthGuest'];
-            
-            for(let i=0;i<inputs.length; i++){
-               inputs[i].classList.remove('input-error');
-               
-               if(inputs[i].id === "date_birth_guest") {
-                    const [dia, mes, ano] = tr.querySelector(idsTds[i]).innerHTML.split('/');
-
-                    const divCpfResponsable = formEditGuest.querySelector("#divCpfResponsableGuest");
-                    const divContainCpfResponsableGuest = formEditGuest.querySelector("#divContainCpfResponsableGuest");
-
-                    let idade = new Date().getFullYear() - ano;
-
-                    if(idade < 18 && !divCpfResponsable){
-                        const wrapper = document.createElement('div');
-                        wrapper.id = "divCpfResponsableGuest"; 
-                        wrapper.classList.add("col-12", "mb-3");
-    
-                        wrapper.innerHTML = `
-                            <label for="cpf_responsable_guest">CPF do Responsável:</label>
-                            <input type="text" name="cpf_responsable_guest" id="cpf_responsable_guest" placeholder="Digite o CPF do responsável..." class="form-control">
-                        `;
-           
-                        const inputCpfResponsable = wrapper.querySelector("#cpf_responsable_guest");
-                        inputCpfResponsable.value = tr.querySelector("#cpfResponsibleGuest").innerHTML;
-                        validateCPFInput(inputCpfResponsable);
-                            
-                        divContainCpfResponsableGuest.classList.remove("d-none");
-                        divContainCpfResponsableGuest.appendChild(wrapper);
-                    } 
-                    
-                    if(idade > 18 && divCpfResponsable){
-                        divCpfResponsable.remove();
-                        divContainCpfResponsableGuest.classList.add("d-none");
-                    }              
-
-                    inputs[i].value = `${ano}-${mes}-${dia}`;
-                    continue;
-                }
-
-               inputs[i].value = tr.querySelector(idsTds[i]).innerHTML;
-            }
-
-            formEditGuest.guestId.value = idFull.split("_")[1];
-        });
-    });
+const writeFilter = (option, complementId) => {
+    return ` 
+         <div class='col-md-3 mb-3'>
+             <label class='form-label'>Onde:</label>
+             <select name='columns[]' class='form-select columns'>
+                 ${option}
+             </select>
+         </div>
+ 
+         <div class='col-md-3 mb-3'>
+             <label class='form-label'>For:</label>
+             <select name='conditions[]' class='form-select conditions'>
+                 <option value="eq">Igual a</option>
+             </select>
+         </div>
+ 
+         <div class="col-md-5">
+             <label class="form-label">Complemento:</label>
+             <div id="type_complement">
+                 <input id="${complementId}" class="form-control complements" name="complements[]" placeholder="Digite o complemento da pesquisa..." type="text">
+             </div>
+         </div>  
+         <div class="col-md-1 d-flex justify-content-end justify-content-md-center align-items-center">
+             <button class="btn btn text-danger mt-3 me-md-4 btn-remove-filter" type="button"><i class="bi-trash-fill"></i></button>
+         </div>
+     `;
 }
 
-//Add Informations on Modal Delete Guest
-const btnOpenModalDelete = [...document.querySelectorAll('.btnOpenModalDelete')];
-if(btnOpenModalDelete){
-    btnOpenModalDelete.forEach(btn => {
-        btn.addEventListener('click', (evt) => {
-            const idFull = evt.target.id;
-            formDeleteGuest.guestId.value = idFull.split("_")[1];
-        });
-    });
-}
-
-//TimeoutAlerts
 const alerts = document.querySelectorAll(".alert");
 if(alerts){
     alerts.forEach((a) => {
@@ -307,14 +134,147 @@ if(alerts){
     });
 }
 
-//Validate Form Search Rooms
 const formCustomSearchGuest = document.querySelector("#formCustomSearchGuest"); 
+const btnSubmitFormCustomSearchGuest = formCustomSearchGuest.querySelector("#btnSubmitFormSearchGuests"); 
+
+const filters = {
+    number: 0,
+    incrementNumber: () => {
+        filters.number += 1;
+    },
+    decrementNumber: () => {
+        filters.number -= 1;
+    },
+    verifyNumber: () => {
+        btnSubmitFormCustomSearchGuest.disabled = (filters.number <= 0);
+    }
+}
+
+filters.verifyNumber();
+
+const divFiltersSearch = formCustomSearchGuest.querySelector("#divFiltersSearch");
+
+const filterSearchGuestName = formCustomSearchGuest.querySelector("#filterSearchGuestName");
+filterSearchGuestName.addEventListener('click', () => {
+    const wrapper = document.createElement('div');
+ 
+    wrapper.classList.add('row'); 
+    wrapper.innerHTML = writeFilter(`<option value="name">Nome</option>`, `complementName`);
+   
+    wrapper.querySelector('.btn-remove-filter').addEventListener('click', () => {
+        filters.decrementNumber();
+        filters.verifyNumber();
+        filterSearchGuestName.disabled = false;
+        wrapper.remove();
+    });
+
+    filters.incrementNumber();
+    filters.verifyNumber();
+
+    filterSearchGuestName.disabled = true;
+
+    divFiltersSearch.appendChild(wrapper);
+});
+
+const filterSearchGuestEmail = formCustomSearchGuest.querySelector("#filterSearchGuestEmail");
+filterSearchGuestEmail.addEventListener('click', () => {
+    const wrapper = document.createElement('div');
+ 
+    wrapper.classList.add('row'); 
+    wrapper.innerHTML = writeFilter(`<option value="email">Email</option>`, `complementEmail`);
+   
+    wrapper.querySelector('.btn-remove-filter').addEventListener('click', () => {
+        filters.decrementNumber();
+        filters.verifyNumber();
+        filterSearchGuestEmail.disabled = false;
+        wrapper.remove();
+    });
+
+    filters.incrementNumber();
+    filters.verifyNumber();
+
+    filterSearchGuestEmail.disabled = true;
+
+    divFiltersSearch.appendChild(wrapper);
+});
+
+const filterSearchGuestCpf = formCustomSearchGuest.querySelector("#filterSearchGuestCPF");
+filterSearchGuestCpf.addEventListener('click', () => {
+    const wrapper = document.createElement('div');
+ 
+    wrapper.classList.add('row'); 
+    wrapper.innerHTML = writeFilter(`<option value="cpf">CPF</option>`, `complementCPF`);
+   
+    wrapper.querySelector('.btn-remove-filter').addEventListener('click', () => {
+        filters.decrementNumber();
+        filters.verifyNumber();
+        filterSearchGuestCpf.disabled = false;
+        wrapper.remove();
+    });
+
+    filters.incrementNumber();
+    filters.verifyNumber();
+
+    validateCPFInput(wrapper.querySelector("#complementCPF"));
+
+    filterSearchGuestCpf.disabled = true;
+
+    divFiltersSearch.appendChild(wrapper);
+});
+
+const filterSearchGuestCPFResposible = formCustomSearchGuest.querySelector("#filterSearchGuestCPFResposible"); 
+filterSearchGuestCPFResposible.addEventListener('click', () => {
+    const wrapper = document.createElement('div');
+ 
+    wrapper.classList.add('row'); 
+    wrapper.innerHTML = writeFilter(`<option value="cpf_responsible">CPF do Responsável</option>`, `complementCPFResponsible`);
+   
+    wrapper.querySelector('.btn-remove-filter').addEventListener('click', () => {
+        filters.decrementNumber();
+        filters.verifyNumber();
+        filterSearchGuestCPFResposible.disabled = false;
+        wrapper.remove();
+    });
+
+    filters.incrementNumber();
+    filters.verifyNumber();
+
+    validateCPFInput(wrapper.querySelector("#complementCPFResponsible"));
+
+    filterSearchGuestCPFResposible.disabled = true;
+
+    divFiltersSearch.appendChild(wrapper);
+});
+
+const filterSearchGuestTelephone = formCustomSearchGuest.querySelector("#filterSearchGuestTelephone"); 
+filterSearchGuestTelephone.addEventListener('click', () => {
+    const wrapper = document.createElement('div');
+ 
+    wrapper.classList.add('row'); 
+    wrapper.innerHTML = writeFilter(`<option value="telephone">Telefone</option>`, `complementTelephone`);
+   
+    wrapper.querySelector('.btn-remove-filter').addEventListener('click', () => {
+        filters.decrementNumber();
+        filters.verifyNumber();
+        filterSearchGuestTelephone.disabled = false;
+        wrapper.remove();
+    });
+
+    filters.incrementNumber();
+    filters.verifyNumber();
+
+    validateTelephoneInput(wrapper.querySelector("#complementTelephone"));
+
+    filterSearchGuestTelephone.disabled = true;
+
+    divFiltersSearch.appendChild(wrapper);
+});
+
 formCustomSearchGuest.addEventListener('submit', (evt) => {
     evt.preventDefault();
     
     const columns = formCustomSearchGuest.querySelectorAll(".columns");
     const conditions = formCustomSearchGuest.querySelectorAll(".conditions");
-
     const complements = formCustomSearchGuest.querySelectorAll(".complements");
 
     const listValidColumns = ["name", "email", "cpf", "cpf_responsible", "telephone"]; 
@@ -327,172 +287,209 @@ formCustomSearchGuest.addEventListener('submit', (evt) => {
     ) 
     { 
         formCustomSearchGuest.submit();
-        formCustomSearchGuest.btn_submit.disabled = true;
-        formCustomSearchGuest.btn_submit.innerHTML = "<div class='spinner-border spinner-border-sm me-2' role='status'><span class='visually-hidden'></span></div>Pesquisando...";
+        btnSubmitFormCustomSearchGuest.disabled = true;
+        btnSubmitFormCustomSearchGuest.innerHTML = "<div class='spinner-border spinner-border-sm me-2' role='status'><span class='visually-hidden'></span></div>Pesquisando...";
     }
 }); 
 
-//Control Filters
-const filters = {
-    number: 0,
-    incrementNumber: () => {
-        filters.number += 1;
-    },
-    decrementNumber: () => {
-        filters.number -= 1;
-    },
-    verifyNumber: () => {
-        formCustomSearchGuest.btn_submit.disabled = (filters.number <= 0);
+const formRegisterGuest = document.querySelector("#formRegisterGuest");
+const btnSubmitFormRegisterGuest = formRegisterGuest.querySelector("btnSubmitFormCreateGuest");
+
+const nameGuestFormRegisterGuest = formRegisterGuest.querySelector("#name_guest");
+const emailGuestFormRegisterGuest = formRegisterGuest.querySelector("#email_guest");
+const cpfGuestFormRegisterGuest = formRegisterGuest.querySelector("#cpf_guest");
+const telephoneGuestFormRegisterGuest = formRegisterGuest.querySelector("#telephone_guest");
+const dateBirthGuestFormRegisterGuest = formRegisterGuest.querySelector("#date_birth_guest");
+const cpfResponsibleGuestFormRegisterGuest = formRegisterGuest.querySelector("#cpf_responsible_guest");
+cpfResponsibleGuestFormRegisterGuest.disabled = true;
+
+nameGuestFormRegisterGuest.addEventListener('input', () => setStatusInput(validateName(nameGuestFormRegisterGuest), nameGuestFormRegisterGuest));
+emailGuestFormRegisterGuest.addEventListener('input', () => setStatusInput(validateEmail(emailGuestFormRegisterGuest), emailGuestFormRegisterGuest));
+validateCPFInput(cpfGuestFormRegisterGuest);
+validateCPFInput(cpfResponsibleGuestFormRegisterGuest);
+validateTelephoneInput(telephoneGuestFormRegisterGuest);
+ValidateDateInput(dateBirthGuestFormRegisterGuest, cpfResponsibleGuestFormRegisterGuest);
+
+formRegisterGuest.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    setStatusInput(validateName(nameGuestFormRegisterGuest), nameGuestFormRegisterGuest);
+    setStatusInput(validateEmail(emailGuestFormRegisterGuest), emailGuestFormRegisterGuest);
+    setStatusInput(validateCPF(cpfGuestFormRegisterGuest.value), cpfGuestFormRegisterGuest);
+    setStatusInput(validateDate(dateBirthGuestFormRegisterGuest.value), dateBirthGuestFormRegisterGuest);
+    setStatusInput(validateTelephone(telephoneGuestFormRegisterGuest.value), telephoneGuestFormRegisterGuest);
+
+    if(!cpfResponsibleGuestFormRegisterGuest.disabled){
+        setStatusInput(validateCPF(cpfResponsibleGuestFormRegisterGuest.value), cpfResponsibleGuestFormRegisterGuest);
     }
+
+    if (
+        validateName(nameGuestFormRegisterGuest) 
+        && validateEmail(emailGuestFormRegisterGuest) 
+        && validateCPF(cpfGuestFormRegisterGuest.value)
+        && validateTelephone(telephoneGuestFormRegisterGuest.value)
+        && validateDate(dateBirthGuestFormRegisterGuest.value)
+    ) 
+    { 
+        if(!cpfResponsibleGuestFormRegisterGuest.disabled){
+            if(!validateCPF(cpfResponsibleGuestFormRegisterGuest.value)){
+                return false;
+            }
+        }
+        formRegisterGuest.submit();
+        btnSubmitFormRegisterGuest.disabled = true;
+        btnSubmitFormRegisterGuest.innerHTML = "<div class='spinner-border spinner-border-sm me-2' role='status'><span class='visually-hidden'></span></div>Cadastrando...";
+    }
+});
+
+document.querySelector("#btnCloseModalFormRegisterGuest").addEventListener('click', () => {
+    const inputs = [
+        nameGuestFormRegisterGuest, 
+        emailGuestFormRegisterGuest,
+        cpfGuestFormRegisterGuest, 
+        cpfResponsibleGuestFormRegisterGuest, 
+        telephoneGuestFormRegisterGuest, 
+        dateBirthGuestFormRegisterGuest
+    ];
+    
+    for(let i=0; i<inputs.length; i++){
+        inputs[i].value = '';    
+        inputs[i].classList.remove('input-error');
+        inputs[i].classList.remove('input-success');
+    }
+
+    cpfResponsibleGuestFormRegisterGuest.disabled = true;
+});
+
+const formEditGuest = document.querySelector("#formEditGuest");
+const btnSubmitFormEditGuest = formEditGuest.querySelector("btnSubmitFormEditGuest");
+
+const nameGuestFormEditGuest = formEditGuest.querySelector("#name_guest");
+const emailGuestFormEditGuest = formEditGuest.querySelector("#email_guest");
+const cpfGuestFormEditGuest = formEditGuest.querySelector("#cpf_guest");
+const telephoneGuestFormEditGuest = formEditGuest.querySelector("#telephone_guest");
+const dateBirthGuestFormEditGuest = formEditGuest.querySelector("#date_birth_guest");
+const cpfResponsibleGuestFormEditGuest = formEditGuest.querySelector("#cpf_responsible_guest");
+cpfResponsibleGuestFormEditGuest.disabled = true;
+
+nameGuestFormEditGuest.addEventListener('input', () => setStatusInput(validateName(nameGuestFormEditGuest), nameGuestFormEditGuest));
+emailGuestFormEditGuest.addEventListener('input', () => setStatusInput(validateEmail(emailGuestFormEditGuest), emailGuestFormEditGuest));
+validateCPFInput(cpfGuestFormEditGuest);
+validateCPFInput(cpfResponsibleGuestFormEditGuest);
+validateTelephoneInput(telephoneGuestFormEditGuest);
+ValidateDateInput(dateBirthGuestFormEditGuest, cpfResponsibleGuestFormEditGuest);
+
+formEditGuest.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    setStatusInput(validateName(nameGuestFormEditGuest), nameGuestFormEditGuest);
+    setStatusInput(validateEmail(emailGuestFormEditGuest), emailGuestFormEditGuest);
+    setStatusInput(validateCPF(cpfGuestFormEditGuest.value), cpfGuestFormEditGuest);
+    setStatusInput(validateDate(dateBirthGuestFormEditGuest.value), dateBirthGuestFormEditGuest);
+    setStatusInput(validateTelephone(telephoneGuestFormEditGuest.value), telephoneGuestFormEditGuest);
+
+    if(!cpfResponsibleGuestFormEditGuest.disabled){
+        setStatusInput(validateCPF(cpfResponsibleGuestFormEditGuest.value), cpfResponsibleGuestFormEditGuest);
+    }
+
+    if (
+        validateName(nameGuestFormEditGuest) 
+        && validateEmail(emailGuestFormEditGuest) 
+        && validateCPF(cpfGuestFormEditGuest.value)
+        && validateTelephone(telephoneGuestFormEditGuest.value)
+        && validateDate(dateBirthGuestFormEditGuest.value)
+    ) 
+    { 
+        if(!cpfResponsibleGuestFormEditGuest.disabled){
+            if(!validateCPF(cpfResponsibleGuestFormEditGuest.value)){
+                return false;
+            }
+        }
+        formEditGuest.submit();
+        btnSubmitFormEditGuest.disabled = true;
+        btnSubmitFormEditGuest.innerHTML = "<div class='spinner-border spinner-border-sm me-2' role='status'><span class='visually-hidden'></span></div>Editando...";
+    }
+});
+
+document.querySelector("#btnCloseModalFormEditGuest").addEventListener('click', () => {
+    const inputs = [
+        nameGuestFormEditGuest, 
+        emailGuestFormEditGuest,
+        cpfGuestFormEditGuest, 
+        cpfResponsibleGuestFormEditGuest,
+        telephoneGuestFormEditGuest, 
+        dateBirthGuestFormEditGuest
+    ];
+    
+    for(let i=0; i<inputs.length; i++){
+        inputs[i].value = '';    
+        inputs[i].classList.remove('input-error');
+        inputs[i].classList.remove('input-success');
+    }
+    
+    cpfResponsibleGuestFormEditGuest.disabled = true;
+});
+
+const btnsOpenModalEdit = document.querySelectorAll('.btnOpenModalEdit');
+if(btnsOpenModalEdit){
+    btnsOpenModalEdit.forEach(btn => {
+        btn.addEventListener('click', (evt) => {
+            const idFull = evt.target.id;
+            
+            const tr = document.querySelector(`#${idFull}`);
+            
+            const inputs = [
+                nameGuestFormEditGuest, 
+                emailGuestFormEditGuest,
+                cpfGuestFormEditGuest, 
+                cpfResponsibleGuestFormEditGuest,
+                telephoneGuestFormEditGuest, 
+                dateBirthGuestFormEditGuest
+            ];
+            
+            const idsTds = [
+                '#viewSearchNameGuest',  
+                '#viewSearchEmailGuest', 
+                '#viewSearchCpfGuest', 
+                '#viewSearchCpfResponsibleGuest', 
+                '#viewSearchTelephoneGuest', 
+                '#viewSearchDateBirthGuest'
+            ];
+            
+            for(let i=0;i<inputs.length; i++){
+               inputs[i].classList.remove('input-error');
+               
+               if(inputs[i].id === "date_birth_guest") {
+                    const [dia, mes, ano] = tr.querySelector(idsTds[i]).innerHTML.split('/');
+                    
+                    let age = Number(new Date().getFullYear()) - Number(ano);
+
+                    cpfResponsibleGuestFormEditGuest.disabled = age > 18;
+
+                    inputs[i].value = `${ano}-${mes}-${dia}`;
+                    continue;
+                }
+
+               inputs[i].value = tr.querySelector(idsTds[i]).innerHTML;
+            }
+
+            formEditGuest.querySelector("#guestId").value = idFull.split("_")[1];
+        });
+    });
 }
 
-filters.verifyNumber();
-
-//Filters HTML
-const writeFilter = (option, complementId) => {
-   return ` 
-        <div class='col-md-3 mb-3'>
-            <label class='form-label'>Onde:</label>
-            <select name='columns[]' class='form-select columns'>
-                ${option}
-            </select>
-        </div>
-
-        <div class='col-md-3 mb-3'>
-            <label class='form-label'>For:</label>
-            <select name='conditions[]' class='form-select conditions'>
-                <option value="eq">Igual a</option>
-            </select>
-        </div>
-
-        <div class="col-md-5">
-            <label class="form-label">Complemento:</label>
-            <div id="type_complement">
-                <input id="${complementId}" class="form-control complements" name="complements[]" placeholder="Digite o complemento da pesquisa..." type="text">
-            </div>
-        </div>  
-        <div class="col-md-1 d-flex justify-content-center align-items-center">
-            <label class="form-label"></label>
-            <button class="btn btn text-danger mt-3 btn-remove-filter" type="button"><i class="bi-trash-fill"></i></button>
-        </div>
-    `;
+const formDeleteGuest = document.querySelector("#formDeleteGuest");
+const btnOpenModalDelete = document.querySelectorAll('.btnOpenModalDelete');
+if(btnOpenModalDelete){
+    btnOpenModalDelete.forEach(btn => {
+        btn.addEventListener('click', (evt) => {
+            const idFull = evt.target.id;
+            formDeleteGuest.querySelector("#guestId").value = idFull.split("_")[1];
+        });
+    });
 }
 
-//Add and Remove Filters on Search Rooms
-filterName.addEventListener('click', () => {
-    const wrapper = document.createElement('div');
- 
-    wrapper.classList.add('row'); 
-    wrapper.innerHTML = writeFilter(`<option value="name">Nome</option>`, `complementName`);
-   
-    wrapper.querySelector('.btn-remove-filter').addEventListener('click', () => {
-        filters.decrementNumber();
-        filters.verifyNumber();
-        filterName.disabled = false;
-        wrapper.remove();
-    });
-
-    filters.incrementNumber();
-    filters.verifyNumber();
-
-    filterName.disabled = true;
-
-    divFiltersSearch.appendChild(wrapper);
-});
-
-filterEmail.addEventListener('click', () => {
-    const wrapper = document.createElement('div');
- 
-    wrapper.classList.add('row'); 
-    wrapper.innerHTML = writeFilter(`<option value="email">Email</option>`, `complementEmail`);
-   
-    wrapper.querySelector('.btn-remove-filter').addEventListener('click', () => {
-        filters.decrementNumber();
-        filters.verifyNumber();
-        filterEmail.disabled = false;
-        wrapper.remove();
-    });
-
-    filters.incrementNumber();
-    filters.verifyNumber();
-
-    filterEmail.disabled = true;
-
-    divFiltersSearch.appendChild(wrapper);
-});
-
-filterCPF.addEventListener('click', () => {
-    const wrapper = document.createElement('div');
- 
-    wrapper.classList.add('row'); 
-    wrapper.innerHTML = writeFilter(`<option value="cpf">CPF</option>`, `complementCPF`);
-   
-    wrapper.querySelector('.btn-remove-filter').addEventListener('click', () => {
-        filters.decrementNumber();
-        filters.verifyNumber();
-        filterCPF.disabled = false;
-        wrapper.remove();
-    });
-
-    filters.incrementNumber();
-    filters.verifyNumber();
-
-    validateCPFInput(wrapper.querySelector("#complementCPF"));
-
-    filterCPF.disabled = true;
-
-    divFiltersSearch.appendChild(wrapper);
-});
-
-filterCPFResposible.addEventListener('click', () => {
-    const wrapper = document.createElement('div');
- 
-    wrapper.classList.add('row'); 
-    wrapper.innerHTML = writeFilter(`<option value="cpf_responsible">CPF do Responsável</option>`, `complementCPFResponsible`);
-   
-    wrapper.querySelector('.btn-remove-filter').addEventListener('click', () => {
-        filters.decrementNumber();
-        filters.verifyNumber();
-        filterCPFResposible.disabled = false;
-        wrapper.remove();
-    });
-
-    filters.incrementNumber();
-    filters.verifyNumber();
-
-    validateCPFInput(wrapper.querySelector("#complementCPFResponsible"));
-
-    filterCPFResposible.disabled = true;
-
-    divFiltersSearch.appendChild(wrapper);
-});
-
-filterTelephone.addEventListener('click', () => {
-    const wrapper = document.createElement('div');
- 
-    wrapper.classList.add('row'); 
-    wrapper.innerHTML = writeFilter(`<option value="telephone">Telefone</option>`, `complementTelephone`);
-   
-    wrapper.querySelector('.btn-remove-filter').addEventListener('click', () => {
-        filters.decrementNumber();
-        filters.verifyNumber();
-        filterTelephone.disabled = false;
-        wrapper.remove();
-    });
-
-    filters.incrementNumber();
-    filters.verifyNumber();
-
-    validateTelephoneInput(wrapper.querySelector("#complementTelephone"));
-
-    filterTelephone.disabled = true;
-
-    divFiltersSearch.appendChild(wrapper);
-});
-
-//Event BTN Delete Guest
-const btnDeleteUser = document.querySelector('#btnDelete');
-
+const btnDelete = document.querySelector('#btnDelete');
 let intervalo = null;
 let segundos = 5;
 
@@ -500,24 +497,24 @@ const atualizarCronometro = () => {
     if (segundos > 0) 
     {
         segundos--;
-        btnDeleteUser.innerHTML = `Excluir (${segundos})`;
+        btnDelete.innerHTML = `Excluir (${segundos})`;
     }
     if (segundos === 0) 
     {
         clearInterval(intervalo);
         intervalo = null;
-        btnDeleteUser.innerHTML = `Excluir`;
-        btnDeleteUser.classList.remove('disabled'); 
-        btnDeleteUser.addEventListener('click', () => {
-            btnDeleteUser.innerHTML = "<div class='spinner-border spinner-border-sm me-2' role='status'><span class='visually-hidden'></span></div>Excluindo...";
+        btnDelete.innerHTML = `Excluir`;
+        btnDelete.classList.remove('disabled'); 
+        btnDelete.addEventListener('click', () => {
+            btnDelete.innerHTML = "<div class='spinner-border spinner-border-sm me-2' role='status'><span class='visually-hidden'></span></div>Excluindo...";
         });
     }
 }
 
 const iniciar = () => {
     segundos = 5;
-    btnDeleteUser.innerHTML = `Excluir (${segundos})`;
-    btnDeleteUser.classList.add('disabled');
+    btnDelete.innerHTML = `Excluir (${segundos})`;
+    btnDelete.classList.add('disabled');
     if (intervalo === null) 
     {
         intervalo = setInterval(atualizarCronometro, 1000);
@@ -525,6 +522,8 @@ const iniciar = () => {
 }
 
 const btns = document.querySelectorAll('.btnOpenModalDelete');
-btns.forEach((el) => {
-    el.addEventListener('click', iniciar);
-});
+if(btns){
+    btns.forEach((el) => {
+        el.addEventListener('click', iniciar);
+    });
+}

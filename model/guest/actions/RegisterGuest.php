@@ -9,7 +9,7 @@ class RegisterGuest implements Action {
         if(!validateName($guest->getName())) {
             throw new Exception("Nome inválido!");
         }
-        if(!validateEmail($guest->getEmail())) {
+        if(!filter_var($guest->getEmail(), FILTER_VALIDATE_EMAIL)) {
             throw new Exception("Email inválido!");
         }
         if(!validateCPF($guest->getCpf())) {
@@ -27,14 +27,14 @@ class RegisterGuest implements Action {
             throw new Exception("Data de nascimento inválida!");
         }
 
-        $status = $guestDAO->verifyExist();
-        if($status === false) {
-            throw new Exception("Erro ao verificar existência de hóspede no banco de dados!");
-        }
+        $status = $guestDAO->checkExistence();
         if($status){
             throw new Exception("Hóspede já cadastrado!");
         }
-  
+        if($status === false) {
+            throw new Exception("Erro ao verificar existência de hóspede no banco de dados!");
+        }
+
         if(!$guestDAO->register()) {
             throw new Exception("Não foi possível cadastrar o hóspede.");
         }

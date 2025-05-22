@@ -1,4 +1,3 @@
-//Validate Functions
 export const validateNumber = (input) => {
   let inputValue = input.value.trim();
     
@@ -16,7 +15,7 @@ export const validateNumber = (input) => {
   return true;
 }
 
-export const validate = (input) => {
+export const defaultValidate = (input) => {
   const inputValue = input.value.trim();
   let aproved = true;
     

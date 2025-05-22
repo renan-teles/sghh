@@ -1,7 +1,7 @@
 <?php
 
 abstract class ClassDAO {
-    private DatabaseConnection $databaseConnection;
+    protected DatabaseConnection $databaseConnection;
 
     public function __construct(DatabaseConnection $databaseConnection) {
         $this->databaseConnection = $databaseConnection;
@@ -10,10 +10,4 @@ abstract class ClassDAO {
     public function getDatabaseConnection(): DatabaseConnection {
         return $this->databaseConnection;
     }
-
-    public function register(): bool {}
-    
-    public function edit(): bool {}
-    
-    public function delete(): bool {}
 }

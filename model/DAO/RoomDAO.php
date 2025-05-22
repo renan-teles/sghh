@@ -10,8 +10,35 @@ class RoomDAO extends ClassDAO {
         parent::__construct($databaseConnection);
     }
 
-    public function getRoom(): Room{
+    public function getRoom(): Room {
         return $this->room;
+    }
+
+    public function checkExistence(): bool|array {
+        try {
+            $number = $this->getRoom()->getNumber();
+         
+            $pdo = $this->getDatabaseConnection()->getDatabaseConnection();
+            
+            $sql = "SELECT 
+                        1 
+                    FROM 
+                        rooms
+                    WHERE
+                        number = :number
+                    LIMIT 1";
+         
+            $query = $pdo->prepare($sql);
+            $query->bindParam(':number', $number);
+            
+            $query->execute();
+
+            $result = $query->fetch(PDO::FETCH_ASSOC);
+
+            return $result ?: []; 
+        } catch (PDOException $exc) {
+            return false;
+        }
     }
 
     public function register(): bool {
@@ -21,20 +48,28 @@ class RoomDAO extends ClassDAO {
             $floor = $this->getRoom()->getFloor();
             $capacity = $this->getRoom()->getCapacity();
             $dailyPrice = $this->getRoom()->getDailyPrice();
+            $isAvailable = $this->getRoom()->getIsAvailable();
             $pdo = $this->getDatabaseConnection()->getDatabaseConnection();
-            $sql = "INSERT INTO 
-                        rooms (id_type_room, number, floor, capacity, daily_price) 
+           
+           $sql = "INSERT INTO 
+                        rooms (id_type_room, number, floor, capacity, daily_price, is_available) 
                     VALUES 
-                        (:idTypeRoom, :number, :floor, :capacity, :dailyPrice)";
-            $query = $pdo->prepare($sql);
+                        (:idTypeRoom, :number, :floor, :capacity, :dailyPrice, :isAvailable)";
+           
+           $query = $pdo->prepare($sql);
             $query->bindParam(':idTypeRoom', $idTypeRoom);
             $query->bindParam(':number', $number);
             $query->bindParam(':floor', $floor);
             $query->bindParam(':capacity', $capacity);
             $query->bindParam(':dailyPrice', $dailyPrice);
+            $query->bindParam(':isAvailable', $isAvailable);
+           
             $query->execute();
+           
             return $query->rowCount() > 0;
         } catch (PDOException $exc) {
+            echo $exc->getMessage();
+            exit;
             return false;
         }
     }
@@ -98,11 +133,6 @@ class RoomDAO extends ClassDAO {
         try {
             $pdo = $this->getDatabaseConnection()->getDatabaseConnection();
     
-            $sql = "SELECT 
-                        r.id, tr.type, r.number, r.floor, r.capacity, r.daily_price, r.is_available
-                    FROM 
-                        rooms r";
-    
             $conditionsSymbols = [
                 "lt" => "<",
                 "gt" => ">",
@@ -112,28 +142,28 @@ class RoomDAO extends ClassDAO {
             ];
     
             $whereClauses = [];
-            $params = [];
+            $values = [];
     
             for ($i = 0; $i < count($columns); $i++) {
                 $column = $columns[$i];
                 $operator = $conditionsSymbols[$conditions[$i]];
-
-                $whereClauses[] = "$column $operator :complement$i";
-                $params[":complement$i"] = $complements[$i];
+               
+                $whereClauses[] = "$column $operator ?";
+                $values[] = $complements[$i];
             }
     
-            if ($whereClauses) {
-                $sql .= " INNER JOIN types_rooms tr on r.id_type_room = tr.id ";
-                $sql .= " WHERE " . implode(' AND ', $whereClauses);
-            }
-
+            $whereSQL = count($whereClauses) ? "WHERE " . implode(" AND ", $whereClauses) : "";
+    
+            $sql = "SELECT
+                        r.id, tr.type_room, r.number, r.floor, r.capacity, r.daily_price, r.is_available
+                    FROM
+                        rooms r
+                    INNER JOIN types_rooms tr ON r.id_type_room = tr.id
+                    $whereSQL 
+                    ORDER BY r.number";
+    
             $query = $pdo->prepare($sql);
-    
-            foreach ($params as $placeholder => $value) {
-                $query->bindValue($placeholder, $value);
-            }
-    
-            $query->execute();
+            $query->execute($values);
     
             $result = $query->fetchAll(PDO::FETCH_ASSOC);
     
@@ -142,7 +172,7 @@ class RoomDAO extends ClassDAO {
             return false;
         }
     }
-
+    
     public function searchByNumber(): array|bool{
         try {        
             $number = $this->getRoom()->getNumber();
@@ -150,11 +180,12 @@ class RoomDAO extends ClassDAO {
             $pdo = $this->getDatabaseConnection()->getDatabaseConnection();
     
             $sql = "SELECT 
-                        r.id, tr.type, r.number, r.floor, r.capacity, r.daily_price, r.is_available 
+                        r.id, tr.type_room, r.number, r.floor, r.capacity, r.daily_price, r.is_available 
                     FROM 
                         rooms r 
                     INNER JOIN types_rooms tr on r.id_type_room = tr.id 
-                    WHERE number = :number";
+                    WHERE number = :number 
+                    LIMIT 1";
        
             $query = $pdo->prepare($sql);
             $query->bindParam(':number', $number);

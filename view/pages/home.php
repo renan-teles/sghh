@@ -1,3 +1,9 @@
+<?php
+    session_start();
+
+    //Components
+    include_once __DIR__ . "/../components/navbar.php";
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -6,77 +12,59 @@
     <title>SGHH - Home</title>
     <link rel="stylesheet" href="../assets/css/css_bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
 </head>
-<body>
-    <nav class='navbar navbar-expand-md shadow-sm'>
-        <div class='container-md'>
-            <h3 class="text-primary">SGHH</h3>
-            <button class='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-target='#navbarNav' aria-controls='navbarNav' aria-expanded='false' aria-label='Toggle navigation'>
-                <span class='navbar-toggler-icon'></span>
-            </button>
-            <div class='collapse navbar-collapse' id='navbarNav'>
-                <ul class='navbar-nav ms-auto'>
-                    <li class='nav-item me-md-2 mt-1 mt-md-0'>
-                        <a class='nav-link active' href='./home.php'><i class='bi- me-1'></i>Home</a>
-                    </li>
-                    <li class='nav-item me-md-2 mt-1 mt-md-0'>
-                        <a class='nav-link' href='./accommodations.php'><i class='bi- me-1'></i>Hospedagens</a>
-                    </li>
-                    <li class='nav-item me-md-2 mt-1 mt-md-0'>
-                        <a class='nav-link' href='./guests.php'><i class='bi- me-1'></i>Hóspedes</a>
-                    </li>
-                    <li class='nav-item me-md-2 mb-3 mb-md-0'>
-                        <a class='nav-link' href='./rooms.php'><i class='bi- me-1'></i>Quartos</a>
-                    </li>
-                    <li class='nav-item ms-md-2 ms-auto'>
-                        <a class='btn btn-danger' href='../../control/controlUser.php?act=logout-user'><i class='bi-box-arrow-in-left me-1'></i>Sair</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+<body class="bg-img">
 
-    <div class="container mt-5 mt-sm-0">
-        <div class="row justify-content-center align-items-center" style="height: 90vh;">
+    <?php showNavbar("home"); ?>
+
+    <div class="container-lg mt-5 mt-lg-0">
+        <div class="row justify-content-center align-items-center" style="height: 100dvh;">
             <div class="col d-flex justify-content-center mb-3">
-                <div class="card" style="width: 20rem;">
+                <div class="card shadow-lg" style="width: 20rem;">
                     <img src="../assets/img/calendario.png" class="card-img-top w-25 ms-auto me-auto mt-3" alt="...">
-                    <div class="card-body text-center">
+                    <div class="card-body text-center shadow-lg">
                         <h5 class="card-title">Hospedagens</h5>
-                        <p class="card-text ">Gestão de Hospedagens</p>
-                        <a href="./accommodations.php" class="btn btn-primary">Gerir Hospedagens</a>
+                        <p class="card-text px-3" style="text-align: justify;">
+                            Controle completo das reservas, acompanhando check-ins, check-outs, disponibilidade de quartos e dados dos hóspedes de forma prática e organizada.
+                        </p>
+                        <a href="./accommodations.php" class="btn text-ligth btn-brown">Gerir Hospedagens</a>
                     </div>
                 </div>
             </div>
             
             <div class="col d-flex justify-content-center mb-3">
-                <div class="card" style="width: 20rem;">
-                    <img src="../assets/img/hospede.png" class="card-img-top w-25 ms-auto me-auto mt-3" alt="...">
-                    <div class="card-body text-center">
+                <div class="card shadow-lg" style="width: 20rem;">
+                    <img src="../assets/img/hospede.png" class="card-img-top ms-auto me-auto mt-3" alt="..." style="width: 80px;">
+                    <div class="card-body text-center shadow-lg">
                         <h5 class="card-title">Hóspedes</h5>
-                        <p class="card-text ">Gestão de Hóspedes.</p>
-                        <a href="./guests.php" class="btn btn-primary">Gerir Hóspedes</a>
+                        <p class="card-text px-3" style="text-align: justify;">
+                            Registre, atualize e consulte as informações dos hóspedes com facilidade, mantendo um histórico completo de dados pessoais para um gerenciamento mais eficiente.
+                        </p>
+                        <a href="./guests.php" class="btn text-ligth btn-brown">Gerir Hóspedes</a>
                     </div>
                 </div>
             </div>
             
             <div class="col d-flex justify-content-center mb-3">
-                <div class="card mb-5 mb-sm-0" style="width: 20rem;">
+                <div class="card mb-5 mb-lg-0 shadow-lg" style="width: 20rem;">
                     <img src="../assets/img/quarto.png" class="card-img-top w-25 ms-auto me-auto mt-3" alt="...">
-                    <div class="card-body text-center">
+                    <div class="card-body text-center shadow-lg">
                         <h5 class="card-title">Quartos</h5>
-                        <p class="card-text ">Gestão de Quartos.</p>
-                        <a href="./rooms.php" class="btn btn-primary">Gerir Quartos</a>
+                        <p class="card-text px-3" style="text-align: justify;">
+                            Organize e administre os quartos, definindo tipos, capacidades, preços e outras informações para garantir um controle eficiente de quartos.
+                        </p>
+                        <a href="./rooms.php" class="btn text-ligth btn-brown">Gerir Quartos</a>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <!--Modals-->
-    <!-- Scrollable modal -->
-    <div class="modal-dialog modal-dialog-scrollable">
-        ...
     </div>
 
     <script src="../assets/js/js_bootstrap/bootstrap.bundle.min.js"></script>

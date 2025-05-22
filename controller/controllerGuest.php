@@ -16,8 +16,7 @@ require_once __DIR__ . '/validate.php';
 $action = $_GET['act'] ?? '';
 
 //Names Actions
-$actionsNames = 
-[
+$actionsNames = [
     'delete-guest',
     'edit-guest',
     'register-guest'
@@ -31,15 +30,15 @@ if(!validateAction($action, $actionsNames)){
 }
 
 //Get Form Data
-$nameGuest = filter_input(INPUT_POST, 'name_guest', FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?? '';
+$nameGuest = $_POST['name_guest'] ?? '';
 
 $emailGuest = filter_input(INPUT_POST, 'email_guest', FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?? '';
 
 $cpf = filter_input(INPUT_POST, 'cpf_guest', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 $cpfGuest = $cpf ? preg_replace('/[^0-9]/', '', $cpf) : "";
 
-$cpfResponsable = filter_input(INPUT_POST, 'cpf_responsable_guest', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-$cpfResponsableGuest = $cpfResponsable ? preg_replace('/[^0-9]/', '', $cpfResponsable) : "";
+$cpfResponsible = filter_input(INPUT_POST, 'cpf_responsible_guest', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+$cpfResponsibleGuest = $cpfResponsible ? preg_replace('/[^0-9]/', '', $cpfResponsible) : "";
 
 $telephone = filter_input(INPUT_POST, 'telephone_guest', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 $telephoneGuest = $telephone? preg_replace('/\D/', '', $telephone) : "";
@@ -47,24 +46,23 @@ $telephoneGuest = $telephone? preg_replace('/\D/', '', $telephone) : "";
 $dateBirthGuest = filter_input(INPUT_POST, 'date_birth_guest', FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?? '';
 
 //Create Objects 
-$guest = new Guest(0, $nameGuest, $emailGuest, $cpfGuest, $cpfResponsableGuest, $telephoneGuest, $dateBirthGuest);
+$guest = new Guest(0, $nameGuest, $emailGuest, $cpfGuest, $cpfResponsibleGuest, $telephoneGuest, $dateBirthGuest);
 
 //Set ID
 if($action !== 'register-guest'){
     $idGuest = filter_input(INPUT_POST, 'guestId', FILTER_VALIDATE_INT);
-    $idGuest = $idGuest ? $idGuest : 0;
-    $guest->setId($idGuest);
+    $guest->setId($idGuest ?: 0);
 }
 
 //Create DAO Object
 $guestDAO = new GuestDAO($guest, $connectDB);
 
 //Actions
-$actions = array(
+$actions = [
     $actionsNames[0] => new DeleteGuest(),
     $actionsNames[1] => new EditGuest(),
     $actionsNames[2] => new RegisterGuest()
-);
+];
 
 //Execute Action
 try{

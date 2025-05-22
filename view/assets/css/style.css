@@ -2,20 +2,19 @@
 
 .active
 {
-    color: #0d6efd !important;
-    border-bottom: 1px solid #0d6efd !important;
+    color: #90591d !important;
+    border-bottom: 1px solid #90591d !important;
 }
 
 .nav-link:hover
 {
-    color: #0d6efd !important;
-    border-bottom: 1px solid #0d6efd !important;
+    color: #90591d !important;
+    border-bottom: 1px solid #90591d !important;
 }
 
-.bg-gray
+.bg-brown
 {
-    background-color: #fafafa;
-
+    background-color: #faf8f3;
 }
 
 .bg-light
@@ -49,4 +48,30 @@
 {
     border-color: #27ae60 !important;
     box-shadow: 0 0 5px rgba(46, 204, 113, 0.5) !important;
+}
+
+.bg-img {
+    background-image: url('../img/hotel-home.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 100vh;
+    background-attachment: fixed;
+}
+
+.text-brown
+{
+    color: #b78f61!important;
+}
+
+.btn-brown
+{
+    color: white!important;
+    background-color: #b78f61!important;
+}
+
+.btn-brown:hover
+{
+    color: white!important;
+    background-color: #b78f61!important;
 }

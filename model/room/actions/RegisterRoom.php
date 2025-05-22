@@ -25,6 +25,14 @@ class RegisterRoom implements Action {
             throw new Exception("Disponibilidade de quarto inválida!");
         }
 
+        $status = $roomDAO->checkExistence();
+        if($status) {
+            throw new Exception("Quarto já cadastrado no sistema!");
+        }
+        if($status === false) {
+            throw new Exception("Erro ao fazer verificação de existência de Quarto!");
+        }
+        
         if(!$roomDAO->register()) {
             throw new Exception("Não foi possível cadastrar o quarto.");
         }
