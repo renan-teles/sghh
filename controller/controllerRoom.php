@@ -8,10 +8,14 @@ require_once __DIR__ . '/../model/DAO/connection_database/connectionToDatabase.p
 require_once __DIR__ . '/../model/DAO/RoomDAO.php';
 require_once __DIR__ . '/../model/room/Room.php';
 require_once __DIR__ . '/../model/room/TypeRoom.php';
-require_once __DIR__ . '/../model/room/actions/DeleteRoom.php';
-require_once __DIR__ . '/../model/room/actions/EditRoom.php';
-require_once __DIR__ . '/../model/room/actions/RegisterRoom.php';
+require_once __DIR__ . '/../model/room/AvailabilityRoom.php';
+require_once __DIR__ . '/actions-business-rules/room/DeleteRoom.php';
+require_once __DIR__ . '/actions-business-rules/room/EditRoom.php';
+require_once __DIR__ . '/actions-business-rules/room/RegisterRoom.php';
 require_once __DIR__ . '/validate.php';
+
+//Url Redirect
+$_SESSION['url_redirect_after_error_or_exception'] = "";
 
 //Get Action
 $action = $_GET['act'] ?? '';
@@ -32,25 +36,26 @@ if(!validateAction($action, $actionsNames)){
 
 //Get Form Data
 $numberRoom = filter_input(INPUT_POST, 'number_room', FILTER_VALIDATE_INT);
-$numberRoom = $numberRoom ? $numberRoom : 0;
+$numberRoom = $numberRoom ?: 0;
 
 $floorRoom = filter_input(INPUT_POST, 'floor_room', FILTER_VALIDATE_INT);
-$floorRoom = $floorRoom ? $floorRoom : 0;
+$floorRoom = $floorRoom ?: 0;
 
 $capacityRoom = filter_input(INPUT_POST, 'capacity_room', FILTER_VALIDATE_INT);
-$capacityRoom = $capacityRoom ? $capacityRoom : 0;
+$capacityRoom = $capacityRoom ?: 0;
 
 $idTypeRoom = filter_input(INPUT_POST, 'type_room', FILTER_VALIDATE_INT);
-$idTypeRoom = $idTypeRoom ? $idTypeRoom : 0;
+$idTypeRoom = $idTypeRoom ?: 0;
 
-$isAvailable = filter_input(INPUT_POST, 'is_available', FILTER_VALIDATE_INT);
-$isAvailable = $isAvailable ? $isAvailable : 1;
+$idAvailabilityRoom = filter_input(INPUT_POST, 'availability_room', FILTER_VALIDATE_INT);
+$idAvailabilityRoom = $idAvailabilityRoom ?: 1;
 
 $dailyPriceRoom = filter_input_float($_POST['daily_price_room'] ?? "");
 
 //Create Objects 
 $typeRoom = new TypeRoom($idTypeRoom,"");
-$room = new Room(0, $numberRoom, $typeRoom, $dailyPriceRoom, $isAvailable, $capacityRoom, $floorRoom);
+$availabilityRoom = new AvailabilityRoom($idAvailabilityRoom, "");
+$room = new Room(0, $numberRoom, $typeRoom, $dailyPriceRoom, $availabilityRoom, $capacityRoom, $floorRoom);
 
 //Set ID
 if($action !== 'register-room'){
@@ -59,7 +64,7 @@ if($action !== 'register-room'){
 }
 
 //Create DAO Object
-$roomDAO = new RoomDAO($room, $connectDB);
+$roomDAO = new RoomDAO($room, $pdoConnection);
 
 //Actions
 $actions = [
@@ -69,9 +74,10 @@ $actions = [
 ];
 
 //Execute Action
-try{
+try {
     $actions[$action]->execute($roomDAO);
-} catch(Exception $ex){
+} catch(Exception $ex) {
     $_SESSION['msg-error'] = $ex->getMessage();
-    header("Location: ../view/pages/rooms.php");
+    header("Location: " . $_SESSION['url_redirect_after_error_or_exception']);
+    unset($_SESSION['url_redirect_after_error_or_exception']);
 }

@@ -17,16 +17,19 @@ function showNavbar($active): void {
                         <a class='nav-link ". ($active === "home"? "active" : "") ."' href='./home.php'><i class='bi-house me-1'></i>Página Inicial</a>
                     </li>
                     <li class='nav-item me-md-2 mt-1 mt-md-0'>
-                        <a class='nav-link ". ($active === "hospedagens"? "active" : "") ."' href='./accommodations.php'><i class='bi-calendar-week me-1'></i>Hospedagens</a>
+                        <a class='nav-link ". ($active === "accommodations"? "active" : "") ."' href='./accommodations.php'><i class='bi-calendar-week me-1'></i>Hospedagens</a>
                     </li>
                     <li class='nav-item me-md-2 mt-1 mt-md-0'>
-                        <a class='nav-link ". ($active === "hospedes"? "active" : "") ."' href='./guests.php'><i class='bi-people me-1'></i>Hóspedes</a>
+                        <a class='nav-link ". ($active === "guests"? "active" : "") ."' href='./guests.php'><i class='bi-people me-1'></i>Hóspedes</a>
                     </li>
                     <li class='nav-item me-md-2 mb-3 mb-md-0'>
-                        <a class='nav-link ". ($active === "quartos"? "active" : "") ."' href='./rooms.php'><i class='bi-building me-1'></i>Quartos</a>
+                        <a class='nav-link ". ($active === "rooms"? "active" : "") ."' href='./rooms.php'><i class='bi-building me-1'></i>Quartos</a>
+                    </li>
+                    <li class='nav-item me-md-2 mb-3 mb-md-0'>
+                        <a class='nav-link ". ($active === "panel-receptionist"? "active" : "") ."' href='./panel-receptionist.php'><i class='bi-person-vcard me-1'></i>Painel</a>
                     </li>
                     <li class='nav-item ms-md-2 ms-auto'>
-                        <a class='btn btn-danger' href='../../control/controlUser.php?act=logout-user'><i class='bi-box-arrow-in-left me-1'></i>Sair</a>
+                        <a class='btn btn-danger' href='../../controller/controllerReceptionist.php?act=logout-receptionist'><i class='bi-box-arrow-in-left me-1'></i>Sair</a>
                     </li>
                 </ul>
                 </div>

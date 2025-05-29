@@ -7,10 +7,13 @@ require_once __DIR__ . '/../model/DAO/connection_database/connectionToDatabase.p
 //Requires
 require_once __DIR__ . '/../model/DAO/GuestDAO.php';
 require_once __DIR__ . '/../model/guest/Guest.php';
-require_once __DIR__ . '/../model/guest/actions/DeleteGuest.php';
-require_once __DIR__ . '/../model/guest/actions/EditGuest.php';
-require_once __DIR__ . '/../model/guest/actions/RegisterGuest.php';
+require_once __DIR__ . '/actions-business-rules/guest/DeleteGuest.php';
+require_once __DIR__ . '/actions-business-rules/guest/EditGuest.php';
+require_once __DIR__ . '/actions-business-rules/guest/RegisterGuest.php';
 require_once __DIR__ . '/validate.php';
+
+//Url Redirect
+$_SESSION['url_redirect_after_error_or_exception'] = "";
 
 //Get Action
 $action = $_GET['act'] ?? '';
@@ -32,7 +35,7 @@ if(!validateAction($action, $actionsNames)){
 //Get Form Data
 $nameGuest = $_POST['name_guest'] ?? '';
 
-$emailGuest = filter_input(INPUT_POST, 'email_guest', FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?? '';
+$emailGuest = $_POST['email_guest'] ?? '';
 
 $cpf = filter_input(INPUT_POST, 'cpf_guest', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 $cpfGuest = $cpf ? preg_replace('/[^0-9]/', '', $cpf) : "";
@@ -55,7 +58,7 @@ if($action !== 'register-guest'){
 }
 
 //Create DAO Object
-$guestDAO = new GuestDAO($guest, $connectDB);
+$guestDAO = new GuestDAO($guest, $pdoConnection);
 
 //Actions
 $actions = [
@@ -65,9 +68,10 @@ $actions = [
 ];
 
 //Execute Action
-try{
+try {
     $actions[$action]->execute($guestDAO);
-} catch(Exception $ex){
+} catch(Exception $ex) {
     $_SESSION['msg-error'] = $ex->getMessage();
-    header("Location: ../view/pages/guests.php");
+    header("Location: " . $_SESSION["url_redirect_after_error_or_exception"]);
+    unset($_SESSION["url_redirect_after_error_or_exception"]);
 }

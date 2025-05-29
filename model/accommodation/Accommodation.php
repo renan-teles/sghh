@@ -75,31 +75,7 @@ class Accommodation {
         $this->total_value = $total_value;
     }
 
-    public function calculateTotalValue(): void {
-        $today = new DateTime();
-        $checkin = new DateTime($this->date_checkin);
-        $checkout = new DateTime($this->date_checkout);
-        
-        $today->setTime(0, 0);
-        $checkin->setTime(0, 0);
-        $checkout->setTime(0, 0);
-
-        if ($checkin < $today) {
-            throw new Exception("O checkin não pode ser anterior à data de hoje.");
-        }
-        
-        if ($checkout < $today) {
-            throw new Exception("O checkout não pode ser anterior à data de hoje.");
-        }
-        
-        if ($checkout < $checkin) {
-            throw new Exception("O checkout não pode ser anterior ao checkin.");
-        }
-
-        $numberOfDays = $checkin->diff($checkout)->days;
-        if($numberOfDays === 0){$numberOfDays = 1;}
-        $dailyPriceRoom = $this->room->getDailyPrice();
-
-        $this->setTotalValue($numberOfDays * $dailyPriceRoom);
+    public function calculateTotalValue(int $numberOfDays): void {
+        $this->setTotalValue($numberOfDays * $this->room->getDailyPrice());
     }    
 }

@@ -10,10 +10,11 @@ require_once __DIR__ . '/../../../model/accommodation/GuestAccommodation.php';
 require_once __DIR__ . '/../../../model/accommodation/StatusAccommodation.php';
 require_once __DIR__ . '/../../../model/accommodation/StatusPayment.php';
 require_once __DIR__ . '/../../../model/room/Room.php';
+require_once __DIR__ . '/../../../model/room/AvailabilityRoom.php';
 require_once __DIR__ . '/../../../model/room/TypeRoom.php';
-require_once __DIR__ . '/../../../model/accommodation/actions/CustomSearchAccommodations.php';
-require_once __DIR__ . '/../../../model/accommodation/actions/SearchAccommodationAfterInsertOrUpdate.php';
-require_once __DIR__ . '/../../../model/accommodation/actions/SearchAccommodationAfterCancelOrEnd.php';
+require_once __DIR__ . '/../../../controller/actions-business-rules/accommodation/CustomSearchAccommodations.php';
+require_once __DIR__ . '/../../../controller/actions-business-rules/accommodation/SearchAccommodationAfterInsertOrUpdate.php';
+require_once __DIR__ . '/../../../controller/actions-business-rules/accommodation/SearchAccommodationAfterCancelOrEnd.php';
 
 //Accommodations
 $accommodations = null;
@@ -64,16 +65,17 @@ if($action === $actionsNames[2]){
 
 //Create Objects 
 $typeRoom = new TypeRoom(0,"");
-$room = new Room(0, $numberRoom ?? 0, $typeRoom, 0, -1, 0, 0);
+$availabilityRoom = new AvailabilityRoom(0,"");
+$room = new Room(0, $numberRoom ?? 0, $typeRoom, 0, $availabilityRoom, 0, 0);
 
 $statusPayment = new StatusPayment(0,"");
 $statusAccommodation = new StatusAccommodation(0,"");
 
-$guestAccommodation = new GuestAccommodation($idAccomm ?? 0, []);
+$guestAccommodation = new GuestAccommodation(0, $idAccomm ?? 0, []);
 $accommodation = new Accommodation($guestAccommodation, $room, $statusAccommodation, $statusPayment, "", "", 0);
 
 //Create DAO Object
-$accommodationDAO = new AccommodationDAO($accommodation, $connectDB);
+$accommodationDAO = new AccommodationDAO($accommodation, $pdoConnection);
 
 //Actions
 $actions = [

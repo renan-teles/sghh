@@ -6,8 +6,9 @@ require_once __DIR__ . '/../../../model/DAO/connection_database/connectionToData
 //Requires
 require_once __DIR__ . '/../../../model/DAO/GuestDAO.php';
 require_once __DIR__ . '/../../../model/guest/Guest.php';
-require_once __DIR__ . '/../../../model/guest/actions/CustomSearchGuests.php';
-require_once __DIR__ . '/../../../model/guest/actions/SearchGuest.php';
+require_once __DIR__ . '/../../../controller/actions-business-rules/guest/CustomSearchGuests.php';
+require_once __DIR__ . '/../../../controller/actions-business-rules/guest/SearchGuestByEmail.php';
+require_once __DIR__ . '/../../../controller/actions-business-rules/guest/SearchGuestById.php';
 require_once __DIR__ . '/../../../controller/validate.php';
 
 //Rooms
@@ -19,7 +20,8 @@ $action = $_GET['act'] ?? '';
 //Names Actions
 $actionsNames = [
     'custom-search-guests',
-    'search-guest'    
+    'search-guest-by-email', 
+    'search-guest-by-id' 
 ];
 
 //Validates
@@ -69,16 +71,25 @@ if($action === $actionsNames[1]){
     $emailGuest = isset($infoGuest["e"]) ? filter_var($infoGuest["e"], FILTER_VALIDATE_EMAIL) : "";
 }
 
+if($action === $actionsNames[2]){
+    $json = filter_input(INPUT_GET, 'id', FILTER_UNSAFE_RAW);
+    $infoGuest = $json ? json_decode($json, true) : [];
+
+    $idGuest = isset($infoGuest["id"]) ? filter_var($infoGuest["id"], FILTER_VALIDATE_INT) : "";
+    $idGuest = $idGuest ?: 0;
+}
+
 //Create Objects 
-$guest = new Guest(0, "", $emailGuest ?? "", "", "", "", "");
+$guest = new Guest($idGuest ?? 0, "", $emailGuest ?? "", "", "", "", "");
 
 //Create DAO Object
-$guestDAO = new GuestDAO($guest, $connectDB);
+$guestDAO = new GuestDAO($guest, $pdoConnection);
 
 //Actions
 $actions = array(
     $actionsNames[0] => new CustomSearchGuest($columns ?? [], $conditions ?? [], $complements ?? []),
-    $actionsNames[1] => new SearchGuest()
+    $actionsNames[1] => new SearchGuestByEmail(),
+    $actionsNames[2] => new SearchGuestById()
 );
 
 //Execute Action

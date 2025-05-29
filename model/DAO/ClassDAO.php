@@ -1,13 +1,13 @@
 <?php
 
 abstract class ClassDAO {
-    protected DatabaseConnection $databaseConnection;
+    protected PDOConnection $pdoConnection;
 
-    public function __construct(DatabaseConnection $databaseConnection) {
-        $this->databaseConnection = $databaseConnection;
+    public function __construct(PDOConnection $pdoConnection) {
+        $this->pdoConnection = $pdoConnection;
     }
 
-    public function getDatabaseConnection(): DatabaseConnection {
-        return $this->databaseConnection;
+    public function getConnectionPDO(): PDO {
+        return $this->pdoConnection->getPDO();
     }
 }

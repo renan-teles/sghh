@@ -1,12 +1,13 @@
 <?php
     session_start();
 
+    //Check Login
+    require __DIR__ . "/../utils/utils.php";
+    checkLogin();
+
     //Components
     include_once __DIR__ . "/../components/navbar.php";
     include_once __DIR__ . "/../components/message.php"; 
-    
-    //Utils
-    require_once __DIR__ . "/../utils/utils.php";
 
     //Search Data Controllers
     require_once __DIR__ . "/../searchDataControllers/rooms/controllerDataSearchRooms.php";
@@ -22,7 +23,7 @@
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body class="bg-brown">
-    <?php showNavbar("hospedagens"); ?>
+    <?php showNavbar("accommodations"); ?>
     <div class="container-lg mt-4">
         <div class="col-12 shadow rounded p-4 bg-light mb-5">
             <div class="row mb-3">
@@ -155,13 +156,13 @@
                                                         <td id='viewSearchTypeRoom'><?=ucfirst(strtolower($r["type_room"]));?></td>
                                                         <td id='viewSearchCapacityRoom'><?=$r["capacity"];?></td>
                                                         <td>R$<span id='viewSearchDailyPriceRoom' class="me-1"><?=number_format($r["daily_price"], 2, ",", ".");?></span></td>
-                                                        <td id='viewSearchIsAvailable'><?=$r["is_available"] === "1"? "Disponível" : "Indisponível";?></td>
+                                                        <td id='viewSearchAvailabilityRoom '><?=ucfirst(strtolower($r["availability_room"]));?></td>
                                                         <td id='viewSearchfloorRoom'><?=$r["floor"];?></td>
                                                         <td>
-                                                            <?php if($r['is_available'] === "1"): ?>
+                                                            <?php if($r['availability_room'] === "disponível"): ?>
                                                                 <button id='tr_<?=$r["id"];?>' class='btn btn-primary btn-sm btn btnOpenModalCreateAccmmodation my-1 my-sm-0' type='button' data-bs-target='#modalCreateAccomm' data-bs-toggle='modal'><i id='tr_<?=$r["id"];?>' class='bi-person-fill-add me-1'></i>Hospedar</button>
                                                             <?php endif; ?>
-                                                            <?php if($r['is_available'] !== "1"): ?>
+                                                            <?php if($r['availability_room'] !== "disponível"): ?>
                                                                 Indisponível
                                                             <?php endif; ?>
                                                         </td>
@@ -194,7 +195,7 @@
                                 <?php if($accommodations): ?>
                                     <h6>Informações de Hospedagem: </h6>
                                     <div class="table-responsive mb-4">
-                                        <table class="table text-center align-middle table-sm table-hover table-bordered">
+                                        <table class="table text-center align-middle table-sm table-hover table-bordered border-secondary">
                                             <thead>
                                                 <tr>
                                                     <th scope="col" class="col-3">Hóspede(s)</th>
@@ -225,15 +226,9 @@
                                                         </td>
                                                         <td>
                                                             <?php 
-                                                                $room = explode(', ', $a["room"]);
-                                                                if($room){
-                                                                    foreach ($room as $r) {
-                                                                        $detailR = explode('- ', $r);
-                                                                        echo "Número: <span id='viewSearchNumberRoom'>" . $detailR[0] . "</span></br>";
-                                                                        echo "Capacidade: <span id='viewSearchCapacityRoom'>" . $detailR[1] . "</span></br>" ;
-                                                                        echo "Diária: R$<span id='viewSearchDailyPriceRoom'>" . number_format($detailR[2], 2, ",", ".") . "</span>";
-                                                                    }
-                                                                }
+                                                                echo "Número: <span id='viewSearchNumberRoom'>" . $a['number_room'] . "</span></br>";
+                                                                echo "Capacidade: <span id='viewSearchCapacityRoom'>" . $a['capacity_room']  . "</span></br>" ;
+                                                                echo "Diária: R$<span id='viewSearchDailyPriceRoom'>" . number_format($a['daily_price_room'], 2, ",", ".") . "</span></br></br>";
                                                             ?>
                                                         </td>
                                                         <td id='viewSearchDateCheckin'><?= date("d/m/Y", strtotime($a["date_checkin"])); ?></td>

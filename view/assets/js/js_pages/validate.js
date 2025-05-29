@@ -107,6 +107,11 @@ export const validateTelephone = (telefone) => {
   return true;
 }
 
+export const validatePassword = (password) => {
+  const regex = /^[\p{L}\p{N}]+$/u;
+  return password.value.trim().length > 6 && regex.test(password.value);
+}
+
 export const setStatusInput = (isValid, input) => {
   input.classList.toggle('input-error', !isValid);
   input.classList.toggle('input-success', isValid);

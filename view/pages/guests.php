@@ -1,12 +1,13 @@
 <?php
     session_start();
+    
+    //Check Login
+    require __DIR__ . "/../utils/utils.php";
+    checkLogin();
 
     //Components
     include_once __DIR__ . "/../components/navbar.php";
     include_once __DIR__ . "/../components/message.php"; 
-    
-    //Utils
-    require_once __DIR__ . "/../utils/utils.php";
 
     //Search Data Controller
     require_once __DIR__ . "/../searchDataControllers/guests/controllerDataSearchGuests.php";
@@ -22,7 +23,7 @@
 </head>
 <body class="bg-brown">
 
-    <?php showNavbar("hospedes"); ?>
+    <?php showNavbar("guests"); ?>
 
     <div class="container-lg mt-4">
         <div class="col-12 shadow rounded p-4 bg-light mb-5">
@@ -227,12 +228,13 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body text-center mt-2">
-                    <h4><i class="bi-person-fill-x me-1"></i>Excluir Hóspede?</h4>
+                    <h4><i class="bi-person-fill-x me-1"></i>Deletar Hóspede?</h4>
                 </div>
                 <div class="modal-footer d-flex justify-content-center">
                     <form id="formDeleteGuest" action="../../controller/controllerGuest.php?act=delete-guest" method="POST">
                         <input type="hidden" id="guestId" name="guestId">
-                        <button id="btnDelete" class="btn btn-danger" type="submit">Excluir</button>
+                        <input type="hidden" id="guestCpf" name="cpf_guest">
+                        <button id="btnDelete" class="btn btn-danger" type="submit">Deletar</button>
                     </form>
                     <button type="button" class="btn" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
                 </div>

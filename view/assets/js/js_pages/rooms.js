@@ -220,9 +220,10 @@ filterSearchRoomAvailability.addEventListener('click', () => {
 
     let complementsOptions = `
         <option value="1">Disponível</option>
-        <option value="0">Indisponível</option>
+        <option value="2">Ocupado</option>
+        <option value="3">Indiponível</option>
     ` ;
-    let columnOption = `<option value="is_available">Disponibilidade</option>`;
+    let columnOption = `<option value="id_availability_room">Disponibilidade</option>`;
 
     wrapper.innerHTML = selectFilter(columnOption, complementsOptions);
    
@@ -248,7 +249,7 @@ formCustomSearchRooms.addEventListener('submit', (evt) => {
     const conditions = formCustomSearchRooms.querySelectorAll(".conditions");
     const complements = formCustomSearchRooms.querySelectorAll(".complements");
 
-    const listValidColumns = ["number", "id_type_room", "capacity", "is_available", "daily_price"]; 
+    const listValidColumns = ["number", "id_type_room", "capacity", "id_availability_room", "daily_price"]; 
     const listValidConditions = ["lt","gt","lte","gte","eq"]; 
     
     if (
@@ -271,6 +272,7 @@ const floorRoomFormRegisterRoom = formRegisterRoom.querySelector("#floor_room");
 const capacityRoomFormRegisterRoom = formRegisterRoom.querySelector("#capacity_room");
 const dailyPriceRoomFormRegisterRoom = formRegisterRoom.querySelector("#daily_price_room");
 const typeRoomFormRegisterRoom = formRegisterRoom.querySelector("#type_room");
+const availabiliyRoomFormRegisterRoom = formRegisterRoom.querySelector("#availability_room");
 
 formRegisterRoom.addEventListener('submit', (evt) => {
     evt.preventDefault();
@@ -279,13 +281,15 @@ formRegisterRoom.addEventListener('submit', (evt) => {
     validateNumberInput(floorRoomFormRegisterRoom);
     validateNumberInput(capacityRoomFormRegisterRoom);
     validateNumberInput(dailyPriceRoomFormRegisterRoom);
+    validateNumberInput(availabiliyRoomFormRegisterRoom);
     validateNumberInput(typeRoomFormRegisterRoom);
-    
+
     if (
         validateNumber(numberRoomFormRegisterRoom) 
         && validateNumber(floorRoomFormRegisterRoom) 
         && validateNumber(capacityRoomFormRegisterRoom)
         && validateNumber(dailyPriceRoomFormRegisterRoom)
+        && validateNumber(availabiliyRoomFormRegisterRoom)
         && validateNumber(typeRoomFormRegisterRoom)
     ) 
     { 
@@ -301,11 +305,12 @@ document.querySelector('#btnCloseFormRegisterRoom').addEventListener('click', ()
         floorRoomFormRegisterRoom, 
         capacityRoomFormRegisterRoom, 
         dailyPriceRoomFormRegisterRoom, 
+        availabiliyRoomFormRegisterRoom,
         typeRoomFormRegisterRoom
     ];
     
     for(let i=0; i<inputs.length; i++){
-        if(inputs[i].id !== "type_room") inputs[i].value = '';    
+        if(inputs[i].id !== "type_room" && inputs[i].id !== "availability_room") inputs[i].value = '';    
         inputs[i].classList.remove('input-error');
         inputs[i].classList.remove('input-success');
     }
@@ -319,6 +324,7 @@ const floorRoomFormEditRoom = formEditRoom.querySelector("#floor_room");
 const capacityRoomFormEditRoom = formEditRoom.querySelector("#capacity_room");
 const dailyPriceRoomFormEditRoom = formEditRoom.querySelector("#daily_price_room");
 const typeRoomFormEditRoom = formEditRoom.querySelector("#type_room");
+const availabiliyRoomFormEditRoom = formEditRoom.querySelector("#availability_room");
 
 formEditRoom.addEventListener('submit', (evt) => {
     evt.preventDefault();
@@ -327,6 +333,7 @@ formEditRoom.addEventListener('submit', (evt) => {
     validateNumberInput(floorRoomFormEditRoom);
     validateNumberInput(capacityRoomFormEditRoom);
     validateNumberInput(dailyPriceRoomFormEditRoom);
+    validateNumberInput(availabiliyRoomFormEditRoom);
     validateNumberInput(typeRoomFormEditRoom);
 
     if (
@@ -334,6 +341,7 @@ formEditRoom.addEventListener('submit', (evt) => {
         && validateNumber(floorRoomFormEditRoom) 
         && validateNumber(capacityRoomFormEditRoom)
         && validateNumber(dailyPriceRoomFormEditRoom)
+        && validateNumber(availabiliyRoomFormEditRoom)
         && validateNumber(typeRoomFormEditRoom)
     ) 
     { 
@@ -372,6 +380,7 @@ if(btnsOpenModalEdit){
                 floorRoomFormEditRoom, 
                 capacityRoomFormEditRoom, 
                 dailyPriceRoomFormEditRoom, 
+                availabiliyRoomFormEditRoom,
                 typeRoomFormEditRoom
             ];
            
@@ -380,6 +389,7 @@ if(btnsOpenModalEdit){
                 '#viewSearchFloorRoom', 
                 '#viewSearchCapacityRoom', 
                 '#viewSearchDailyPriceRoom', 
+                '#viewSearchAvailabilityRoom',
                 '#viewSearchTypeRoom'
             ];
 
@@ -396,6 +406,17 @@ if(btnsOpenModalEdit){
                     inputs[i].value = typesRooms.get(tr.querySelector(idsTds[i]).innerHTML);
                     continue;
                 }
+
+                if(inputs[i].id === "availability_room"){
+                    const availabilitysRooms = new Map();
+
+                    availabilitysRooms.set("Disponível", "1");
+                    availabilitysRooms.set("Ocupado", "2");
+                    availabilitysRooms.set("Indisponível", "3");
+
+                    inputs[i].value = availabilitysRooms.get(tr.querySelector(idsTds[i]).innerHTML);
+                    continue;
+                }
             
                inputs[i].value = tr.querySelector(idsTds[i]).innerHTML;
             }
@@ -406,13 +427,15 @@ if(btnsOpenModalEdit){
 }
 
 const formDeleteRoom = document.querySelector("#formDeleteRoom");
-
 const btnOpenModalDelete = [...document.querySelectorAll('.btnOpenModalDelete')];
 if(btnOpenModalDelete){
     btnOpenModalDelete.forEach(btn => {
         btn.addEventListener('click', (evt) => {
             const idFull = evt.target.id;
             formDeleteRoom.querySelector("#roomId").value = idFull.split("_")[1]; 
+             
+            const tr = document.querySelector(`#${idFull}`);
+            formDeleteRoom.querySelector("#roomNumber").value = tr.querySelector("#viewSearchNumberRoom").innerHTML;
         });
     });
 }
@@ -425,23 +448,23 @@ const atualizarCronometro = () => {
     if (segundos > 0) 
     {
         segundos--;
-        btnDelete.innerHTML = `Excluir (${segundos})`;
+        btnDelete.innerHTML = `Deletar (${segundos})`;
     }
     if (segundos === 0) 
     {
         clearInterval(intervalo);
         intervalo = null;
-        btnDelete.innerHTML = `Excluir`;
+        btnDelete.innerHTML = `Deletar`;
         btnDelete.classList.remove('disabled'); 
         btnDelete.addEventListener('click', () => {
-            btnDelete.innerHTML = "<div class='spinner-border spinner-border-sm me-2' role='status'><span class='visually-hidden'></span></div>Excluindo...";
+            btnDelete.innerHTML = "<div class='spinner-border spinner-border-sm me-2' role='status'><span class='visually-hidden'></span></div>Deletando...";
         });
     }
 }
 
 const iniciar = () => {
     segundos = 5;
-    btnDelete.innerHTML = `Excluir (${segundos})`;
+    btnDelete.innerHTML = `Deletar (${segundos})`;
     btnDelete.classList.add('disabled');
     if (intervalo === null) 
     {

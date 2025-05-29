@@ -485,6 +485,8 @@ if(btnOpenModalDelete){
         btn.addEventListener('click', (evt) => {
             const idFull = evt.target.id;
             formDeleteGuest.querySelector("#guestId").value = idFull.split("_")[1];
+            const tr = document.querySelector(`#${idFull}`);
+            formDeleteGuest.querySelector("#guestCpf").value = tr.querySelector("#viewSearchCpfGuest").innerHTML;
         });
     });
 }
@@ -497,23 +499,23 @@ const atualizarCronometro = () => {
     if (segundos > 0) 
     {
         segundos--;
-        btnDelete.innerHTML = `Excluir (${segundos})`;
+        btnDelete.innerHTML = `Deletar (${segundos})`;
     }
     if (segundos === 0) 
     {
         clearInterval(intervalo);
         intervalo = null;
-        btnDelete.innerHTML = `Excluir`;
+        btnDelete.innerHTML = `Deletar`;
         btnDelete.classList.remove('disabled'); 
         btnDelete.addEventListener('click', () => {
-            btnDelete.innerHTML = "<div class='spinner-border spinner-border-sm me-2' role='status'><span class='visually-hidden'></span></div>Excluindo...";
+            btnDelete.innerHTML = "<div class='spinner-border spinner-border-sm me-2' role='status'><span class='visually-hidden'></span></div>Deletando...";
         });
     }
 }
 
 const iniciar = () => {
     segundos = 5;
-    btnDelete.innerHTML = `Excluir (${segundos})`;
+    btnDelete.innerHTML = `Deletar (${segundos})`;
     btnDelete.classList.add('disabled');
     if (intervalo === null) 
     {
