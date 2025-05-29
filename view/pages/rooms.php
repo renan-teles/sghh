@@ -1,6 +1,10 @@
 <?php
     session_start();
 
+    //Check Login
+    require __DIR__ . "/../utils/utils.php";
+    checkLogin();
+
     //Components
     include_once __DIR__ . "/../components/navbar.php";
     include_once __DIR__ . "/../components/message.php"; 
@@ -19,7 +23,7 @@
 </head>
 <body class="bg-brown">
 
-    <?php showNavbar("quartos"); ?>
+    <?php showNavbar("rooms"); ?>
 
     <div class="container-lg mt-4">
         <div class="col-12 shadow rounded p-4 bg-light mb-5">
@@ -107,11 +111,13 @@
                                         <td id='viewSearchTypeRoom'><?= ucfirst(strtolower($r["type_room"])); ?></td>
                                         <td id='viewSearchCapacityRoom'><?= $r["capacity"]; ?></td>
                                         <td>R$<span id='viewSearchDailyPriceRoom' class="me-1"><?= number_format($r["daily_price"], 2, ",", "."); ?></span></td>
-                                        <td id='viewSearchIsAvailable'><?= $r["is_available"] === "1"? "Disponível" : "Indisponível";?></td>
+                                        <td id='viewSearchAvailabilityRoom'><?= ucfirst(strtolower($r["availability_room"])); ?></td>
                                         <td id='viewSearchFloorRoom'><?= $r["floor"]; ?></td>
                                         <td>
-                                            <button id='tr_<?=$r["id"];?>' class='btn btn-secondary btn-sm btn btnOpenModalEdit my-1 my-md-0' type='button' data-bs-target='#modalEditRoom' data-bs-toggle='modal'><i id='tr_<?=$r["id"];?>' class='bi-pencil-fill'></i></button>
-                                            <button id='tr_<?=$r["id"];?>' class='btn btn-danger btn-sm btnOpenModalDelete my-1 my-md-0' type='button' data-bs-target='#modalDeleteRoom' data-bs-toggle='modal'><i id='tr_<?=$r["id"];?>' class='bi-trash-fill'></i></button>
+                                            <?php if($r['availability_room'] !== 'ocupado'): ?>
+                                                <button id='tr_<?=$r["id"];?>' class='btn btn-secondary btn-sm btn btnOpenModalEdit my-1 my-md-0' type='button' data-bs-target='#modalEditRoom' data-bs-toggle='modal'><i id='tr_<?=$r["id"];?>' class='bi-pencil-fill'></i></button>
+                                                <button id='tr_<?=$r["id"];?>' class='btn btn-danger btn-sm btnOpenModalDelete my-1 my-md-0' type='button' data-bs-target='#modalDeleteRoom' data-bs-toggle='modal'><i id='tr_<?=$r["id"];?>' class='bi-trash-fill'></i></button>
+                                            <?php endif; ?>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -152,6 +158,14 @@
                         <div class="col-md-6 mb-3">
                             <label for="daily_price_room">Preço da Diária:</label>
                             <input type="text" name="daily_price_room" id="daily_price_room" placeholder="Digite o preço da diária do quarto..." class="form-control">
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label for="availability_room">Disponibilidade:</label>
+                            <select class="form-select" name="availability_room" id="availability_room" aria-label="Default select example">
+                                <option value="1" selected>Disponível</option>
+                                <!-- <option value="2">Ocupado</option> -->
+                                <option value="3">Indiponível</option>
+                            </select>
                         </div>
                         <div class="col-12 mb-3">
                             <label for="type_room">Tipo:</label>
@@ -199,6 +213,14 @@
                             <input type="text" name="daily_price_room" id="daily_price_room" placeholder="Digite o preço da diária do quarto..." class="form-control">
                         </div>
                         <div class="col-12 mb-3">
+                            <label for="availability_room">Disponibilidade:</label>
+                            <select class="form-select" name="availability_room" id="availability_room" aria-label="Default select example">
+                                <option value="1" selected>Disponível</option>
+                                <!-- <option value="2">Ocupado</option> -->
+                                <option value="3">Indiponível</option>
+                            </select>
+                        </div>
+                        <div class="col-12 mb-3">
                             <label for="type_room">Tipo:</label>
                             <select class="form-select" name="type_room" id="type_room" aria-label="Default select example">
                                 <option value="1">Simples</option>
@@ -222,12 +244,13 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body text-center mt-2">
-                    <h4><i class="bi-building-fill-x me-1"></i>Excluir Quarto?</h4>
+                    <h4><i class="bi-building-fill-x me-1"></i>Deletar Quarto?</h4>
                 </div>
                 <div class="modal-footer d-flex justify-content-center">
                     <form id="formDeleteRoom" action="../../controller/controllerRoom.php?act=delete-room" method="POST">
                         <input type="hidden" id="roomId" name="roomId">
-                        <button id="btnDelete" class="btn btn-danger" type="submit">Excluir</button>
+                        <input type="hidden" id="roomNumber" name="number_room">
+                        <button id="btnDelete" class="btn btn-danger" type="submit">Deletar</button>
                     </form>
                     <button type="button" class="btn" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
                 </div>

@@ -261,9 +261,8 @@ filterSearchRoomAvailability.addEventListener('click', () => {
 
     let complementsOptions = `
         <option value="1">Disponível</option>
-        <option value="0">Indisponível</option>
     ` ;
-    let columnOption = `<option value="is_available">Disponibilidade</option>`;
+    let columnOption = `<option value="id_availability_room">Disponibilidade</option>`;
 
     wrapper.innerHTML = selectFilter(columnOption, complementsOptions);
    
@@ -289,7 +288,7 @@ formCustomSearchRooms.addEventListener('submit', (evt) => {
     const conditions = formCustomSearchRooms.querySelectorAll(".conditions");
     const complements = formCustomSearchRooms.querySelectorAll(".complements");
 
-    const listValidColumns = ["number", "id_type_room", "capacity", "is_available", "daily_price"]; 
+    const listValidColumns = ["number", "id_type_room", "capacity", "id_availability_room", "daily_price"]; 
     const listValidConditions = ["lt","gt","lte","gte","eq"]; 
     
     if (

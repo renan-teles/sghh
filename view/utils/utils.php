@@ -23,3 +23,10 @@ function formatTelephone(string $telefone): string {
 
     return $telefone;
 }
+
+function checkLogin(): void {
+    if(!isset($_SESSION['receptionistData'])){
+        header('Location: ../../index.php');
+        exit;
+    }
+}

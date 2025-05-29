@@ -5,16 +5,16 @@ class Room {
     private int $number;
     private TypeRoom $type;
     private float $daily_price;
-    private int $is_available;
+    private AvailabilityRoom $availability;
     private int $capacity;
     private int $floor;
 
-    public function __construct(int $id, int $number, TypeRoom $type, float $daily_price, int $is_available, int $capacity, int $floor) {
+    public function __construct(int $id, int $number, TypeRoom $type, float $daily_price, AvailabilityRoom $availability, int $capacity, int $floor) {
         $this->id = $id;
         $this->number = $number;
         $this->type = $type;
         $this->daily_price = $daily_price;
-        $this->is_available = $is_available;
+        $this->availability = $availability;
         $this->capacity = $capacity;
         $this->floor = $floor;
     }
@@ -51,12 +51,12 @@ class Room {
         $this->daily_price = $daily_price;
     }
 
-    public function getIsAvailable(): int {
-        return $this->is_available;
+    public function getAvailability(): AvailabilityRoom {
+        return $this->availability;
     }
 
-    public function setIsAvailable(int $is_available): void {
-        $this->is_available = $is_available;
+    public function setAvailability(AvailabilityRoom $availability): void {
+        $this->availability = $availability;
     }
 
     public function getCapacity(): int {

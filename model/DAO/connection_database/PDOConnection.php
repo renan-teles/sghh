@@ -1,8 +1,6 @@
 <?php
 
-require_once __DIR__ . "/interface/DatabaseConnection.php";
-
-class PDOConnection implements DatabaseConnection {
+class PDOConnection {
     private string $dns;
     private string $user;
     private string $pass;
@@ -26,7 +24,7 @@ class PDOConnection implements DatabaseConnection {
         return $this->pass;
     }
 
-    public function getDatabaseConnection(): PDO {
+    public function getPDO(): PDO {
         return $this->pdo;
     }
 

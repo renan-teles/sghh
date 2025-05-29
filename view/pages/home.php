@@ -1,6 +1,10 @@
 <?php
     session_start();
 
+    //Check Login
+    require __DIR__ . "/../utils/utils.php";
+    checkLogin();
+
     //Components
     include_once __DIR__ . "/../components/navbar.php";
 ?>

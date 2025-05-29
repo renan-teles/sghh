@@ -6,9 +6,10 @@ require_once __DIR__ . '/../../../model/DAO/connection_database/connectionToData
 //Requires
 require_once __DIR__ . '/../../../model/DAO/RoomDAO.php';
 require_once __DIR__ . '/../../../model/room/Room.php';
+require_once __DIR__ . '/../../../model/room/AvailabilityRoom.php';
 require_once __DIR__ . '/../../../model/room/TypeRoom.php';
-require_once __DIR__ . '/../../../model/room/actions/CustomSearchRoom.php';
-require_once __DIR__ . '/../../../model/room/actions/SearchRoom.php';
+require_once __DIR__ . '/../../../controller/actions-business-rules/room/CustomSearchRoom.php';
+require_once __DIR__ . '/../../../controller/actions-business-rules/room/SearchRoomByNumber.php';
 
 //Rooms
 $rooms = null;
@@ -19,7 +20,7 @@ $action = $_GET['act'] ?? '';
 //Names Actions
 $actionsNames = [
     'custom-search-rooms',
-    'search-room'    
+    'search-room-by-number'    
 ];
 
 //Validates
@@ -27,7 +28,7 @@ if($action === $actionsNames[0]){
     //Valid Params
     $columns = array_map(function ($value) {
         $value = trim($value);
-        return in_array(filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS), ["number", "is_available", "id_type_room", "daily_price", "capacity"])? $value : "";
+        return in_array(filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS), ["number", "id_availability_room", "id_type_room", "daily_price", "capacity"])? $value : "";
     }, $_POST['columns'] ?? []);
 
     $conditions = array_map(function ($value) {
@@ -41,8 +42,7 @@ if($action === $actionsNames[0]){
             $value = str_replace('.', '', $value); 
             $value = str_replace(',', '.', $value);
         }
-        $value = filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        return $value || $value === "0"? $value : "";
+        return filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     }, $_POST['complements'] ?? []);
 }
 
@@ -54,18 +54,18 @@ if ($action === $actionsNames[1]) {
     $numberRoom = $numberRoom ?: 0;
 }
 
-// Criar objetos
+// Create Objects
 $typeRoom = new TypeRoom(0, "");
-$room = new Room(0, $numberRoom ?? 0, $typeRoom, 0, 0, 0, 0);
-
+$availabilityRoom = new AvailabilityRoom(0, "");
+$room = new Room(0, $numberRoom ?? 0, $typeRoom, 0, $availabilityRoom, 0, 0);
 
 //Create DAO Object
-$roomDAO = new RoomDAO($room, $connectDB);
+$roomDAO = new RoomDAO($room, $pdoConnection);
 
 //Actions
 $actions = array(
     $actionsNames[0] => new CustomSearchRoom($columns ?? [], $conditions ?? [], $complements ?? []),
-    $actionsNames[1] => new SearchRoom()
+    $actionsNames[1] => new SearchRoomByNumber()
 );
 
 //Execute Action

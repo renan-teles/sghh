@@ -19,7 +19,7 @@ function filter_input_float(string $value): float {
     }
 }
 
-function validateCPF(string $cpf) {
+function validateCPF(string $cpf): bool {
     if (strlen($cpf) != 11) {
         return false;
     }
@@ -76,9 +76,10 @@ function validateDate(string $date): bool {
     return checkdate((int)$month, (int)$day, (int)$year);
 }
 
-function validateLogin(): void {
-    if(!isset($_SESSION['receptionistData'])){
-        header('Location: ../../index.php');
-        exit;
-    }
+function validatePassword(string $password): bool {
+    return strlen($password) >= 7 && preg_match('/^[\p{L}\p{N}]+$/u', $password);
+}
+
+function validateDiffOfDays(){
+
 }

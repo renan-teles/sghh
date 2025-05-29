@@ -1,1 +1,2 @@
 # sghh
+O  SGHH (Sistema de Gestão de Hospedagens em Hotel), de forma resumida, é uma aplicação web desenvolvida para otimizar a administração de hospedagens. O sistema oferece funcionalidades completas para o cadastro, edição e exclusão de quartos e hóspedes. Além disso, permite realizar o processo de hospedagem, associando de forma eficiente, organizada e direta um hóspede a um quarto, facilitando o controle e a organização das reservas.
