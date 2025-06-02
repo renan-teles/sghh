@@ -28,7 +28,7 @@
 
     <?php showNavbar("home"); ?>
 
-    <div class="container-lg mt-5 mt-lg-0">
+    <div class="container-lg">
         <div class="row justify-content-center align-items-center" style="height: 100dvh;">
             <div class="col d-flex justify-content-center mb-3">
                 <div class="card shadow-lg" style="width: 20rem;">

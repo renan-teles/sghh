@@ -24,11 +24,14 @@
 </head>
 <body class="bg-brown">
     <?php showNavbar("accommodations"); ?>
-    <div class="container-lg mt-4">
+
+    <div class="invisible p-5"></div>
+    
+    <div class="container-lg">
         <div class="col-12 shadow rounded p-4 bg-light mb-5">
             <div class="row mb-3">
                 <div class="col-12 col-md text-center text-md-start">
-                    <h2><i class="bi-calendar-week me-2"></i>Gestão de Hospedagens</h2>
+                    <h2 id="title-page"><i class="bi-calendar-week me-2"></i>Gestão de Hospedagens</h2>
                 </div>
             </div>
             
@@ -243,13 +246,13 @@
                                                                 </button>
                                                                 <ul id="optionsAccommMenu" class="dropdown-menu">
                                                                     <li class="mb-1 mb-md-2">
-                                                                        <button id='tr_<?=$a["id"];?>' class='btn btn-outline-success btn-sm btnOpenModalEnd my-1 my-sm-0 w-100' type='button' data-bs-target='#modalEndAccomm' data-bs-toggle='modal'><i class="bi-building-fill-check me-1"></i>Finalizar</button>
+                                                                        <button id='tr_<?=$a["id"];?>' class='btn btn-outline-success btn-sm btnOpenModalEnd my-1 my-sm-0 w-100' type='button' data-bs-target='#modalEndAccomm' data-bs-toggle='modal'><i id='tr_<?=$a["id"];?>' class="bi-building-fill-check me-1"></i>Finalizar</button>
                                                                     </li>
                                                                     <li class="mb-1 mb-md-2">
-                                                                        <button id='tr_<?=$a["id"];?>' class='btn btn-outline-secondary btn-sm btnOpenModalEdit my-1 my-sm-0 w-100' type='button' data-bs-target='#modalEditAccomm' data-bs-toggle='modal'><i class="bi-building-fill-gear me-1"></i>Editar</button>
+                                                                        <button id='tr_<?=$a["id"];?>' class='btn btn-outline-secondary btn-sm btnOpenModalEdit my-1 my-sm-0 w-100' type='button' data-bs-target='#modalEditAccomm' data-bs-toggle='modal'><i id='tr_<?=$a["id"];?>' class="bi-building-fill-gear me-1"></i>Editar</button>
                                                                     </li>
                                                                     <li>
-                                                                        <button id='tr_<?=$a["id"];?>' class='btn btn-outline-danger btn-sm btnOpenModalCanceled my-1 my-sm-0 w-100' type='button' data-bs-target='#modalCanceledAccomm' data-bs-toggle='modal'><i class="bi-building-fill-x me-1"></i>Cancelar</button>
+                                                                        <button id='tr_<?=$a["id"];?>' class='btn btn-outline-danger btn-sm btnOpenModalCanceled my-1 my-sm-0 w-100' type='button' data-bs-target='#modalCanceledAccomm' data-bs-toggle='modal'><i id='tr_<?=$a["id"];?>' class="bi-building-fill-x me-1"></i>Cancelar</button>
                                                                     </li>
                                                                 </ul>  
                                                             <?php endif; ?>
@@ -274,8 +277,10 @@
         </div>
     </div>
 
+    <button id="btnTop" class="btn bg-light shadow-sm text-brown px-3 fs-2"><i class="bi-arrow-bar-up"></i></button>
+
     <!-- MODAL CREATE ACCOMMODATION -->
-    <div class="modal fade" id="modalCreateAccomm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modalCreateAccomm" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
@@ -344,7 +349,7 @@
     </div>
    
     <!-- MODAL EDIT ACCOMMODATION -->
-    <div class="modal fade" id="modalEditAccomm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modalEditAccomm" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">

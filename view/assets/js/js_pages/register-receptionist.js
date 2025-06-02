@@ -24,7 +24,7 @@ form.addEventListener('submit', (evt) => {
     if (validateName(name) && validateEmail(email) && validatePassword(password)){   
         form.submit();
         btnSubmit .disabled = true;
-        btnSubmit.innerHTML = "<div class='spinner-border spinner-border-sm me-2' role='status'><span class='visually-hidden'></span></div>Criando sua conta...";
+        btnSubmit.innerHTML = "<div class='spinner-border spinner-border-sm me-2' role='status'><span class='visually-hidden'></span></div>Criando conta de recepcionista...";
     }
 });
 

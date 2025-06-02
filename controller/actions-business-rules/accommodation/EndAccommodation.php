@@ -8,12 +8,14 @@ class EndAccommodation implements Action {
           
         $_SESSION['url_redirect_after_error_or_exception'] = "../view/pages/accommodations.php";
 
+        //Validate Accommodation ID
         if($accommodation->getGuestAccommodation()->getIdAccommodation() <= 0) {
             throw new Exception("Id de hospedagem inválido!");
         }
 
         $_SESSION['url_redirect_after_error_or_exception'] = "../view/pages/accommodations.php?act=search-accommodation-after-cancel-or-end&id=" . urlencode(json_encode(["id" => $accommodation->getGuestAccommodation()->getIdAccommodation()]));
      
+
         /*
         $status = $accommodationDAO->checkStatusAccommodationById(3);
         if($status) {
@@ -24,10 +26,13 @@ class EndAccommodation implements Action {
         }
         */
 
+
+        //End Accommodation
         if(!$accommodationDAO->endAccommodation()) {
             throw new Exception("Não foi possível finalizar a hospedagem.");
         }
 
+        //Response
         $_SESSION['msg-success'] = "Hóspedagem finalizada com sucesso!"; 
         header("Location: ../view/pages/accommodations.php?act=search-accommodation-after-cancel-or-end&id=" . urlencode(json_encode(["id" => $accommodation->getGuestAccommodation()->getIdAccommodation()])));
     }

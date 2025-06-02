@@ -8,6 +8,7 @@ class DeleteGuest implements Action {
 
         $_SESSION['url_redirect_after_error_or_exception'] = "../view/pages/guests.php";
 
+        //Validate Guest Form Data
         if($guest->getId() <= 0) {
             throw new Exception("Id de hóspede inválido!");
         }
@@ -18,14 +19,17 @@ class DeleteGuest implements Action {
             throw new Exception("CPF inválido!");
         }
 
+        //Accommodation Association Check  
         if($guestDAO->accommodationAssociationCheckByCpf()){
             throw new Exception("Não é possível deletar um hóspede que já esteja associado a alguma hospedagem.");
         }
 
+        //Delete Guest
         if(!$guestDAO->deleteById()) {
             throw new Exception("Não foi possível deletar os dados do hóspede.");
         }
 
+        //Response
         $_SESSION['msg-success'] = "Dados do hóspede deletados com sucesso!"; 
         header("Location: ../view/pages/guests.php");
     }   

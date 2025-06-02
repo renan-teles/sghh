@@ -55,7 +55,7 @@
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    min-height: 100vh;
+    min-height: 100dvh;
     background-attachment: fixed;
 }
 
@@ -74,4 +74,13 @@
 {
     color: white!important;
     background-color: #b78f61!important;
+}
+
+#btnTop {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 99;
+    cursor: pointer;
 }

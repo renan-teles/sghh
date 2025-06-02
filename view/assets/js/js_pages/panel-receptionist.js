@@ -22,7 +22,7 @@ formEditNameAndEmail.addEventListener('submit', (evt) => {
     if (validateName(name) && validateEmail(email)){   
         formEditNameAndEmail.submit();
         btnSubmitEdit.disabled = true;
-        btnSubmitEdit.innerHTML = "<div class='spinner-border spinner-border-sm me-2' role='status'><span class='visually-hidden'></span></div>Editando...";
+        btnSubmitEdit.innerHTML = "<div class='spinner-border spinner-border-sm me-2' role='status'><span class='visually-hidden'></span></div>Salvando...";
     }
 });
 
@@ -44,7 +44,7 @@ formEditPassword.addEventListener('submit', (evt) => {
     if (validatePassword(password) && validatePassword(newPassword)){   
         formEditPassword.submit();
         btnSubmitEditPassword.disabled = true;
-        btnSubmitEditPassword.innerHTML = "<div class='spinner-border spinner-border-sm me-2' role='status'><span class='visually-hidden'></span></div>Editando...";
+        btnSubmitEditPassword.innerHTML = "<div class='spinner-border spinner-border-sm me-2' role='status'><span class='visually-hidden'></span></div>Salvando...";
     }
 });
 

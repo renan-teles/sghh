@@ -25,11 +25,13 @@
 
     <?php showNavbar("rooms"); ?>
 
-    <div class="container-lg mt-4">
+    <div class="invisible p-5"></div>
+
+    <div class="container-lg">
         <div class="col-12 shadow rounded p-4 bg-light mb-5">
             <div class="row mb-3">
                 <div class="col-12 col-md text-center text-md-start">
-                    <h2><i class="bi-building me-2"></i>Gestão de Quartos</h2>
+                    <h2 id="title-page"><i class="bi-building me-2"></i>Gestão de Quartos</h2>
                 </div>
                 <div class="col-12 col-md text-center text-md-end mt-2 mt-md-0">
                     <button class="btn text-ligth btn-brown" type="button" data-bs-target="#modalAddRoom" data-bs-toggle="modal">
@@ -132,8 +134,10 @@
         </div>
     </div>
 
+    <button id="btnTop" class="btn bg-light shadow-sm text-brown px-3 fs-2"><i class="bi-arrow-bar-up"></i></button>
+
     <!-- MODAL REGISTER ROOM -->
-    <div class="modal fade" id="modalAddRoom" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modalAddRoom" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
@@ -163,7 +167,6 @@
                             <label for="availability_room">Disponibilidade:</label>
                             <select class="form-select" name="availability_room" id="availability_room" aria-label="Default select example">
                                 <option value="1" selected>Disponível</option>
-                                <!-- <option value="2">Ocupado</option> -->
                                 <option value="3">Indiponível</option>
                             </select>
                         </div>
@@ -186,7 +189,7 @@
     </div>
 
      <!-- MODAL EDIT ROOM -->
-     <div class="modal fade" id="modalEditRoom" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+     <div class="modal fade" id="modalEditRoom" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
@@ -216,7 +219,6 @@
                             <label for="availability_room">Disponibilidade:</label>
                             <select class="form-select" name="availability_room" id="availability_room" aria-label="Default select example">
                                 <option value="1" selected>Disponível</option>
-                                <!-- <option value="2">Ocupado</option> -->
                                 <option value="3">Indiponível</option>
                             </select>
                         </div>
