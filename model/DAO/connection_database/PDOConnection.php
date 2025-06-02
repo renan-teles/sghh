@@ -36,7 +36,7 @@ class PDOConnection {
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->pdo = $pdo;
         } catch (PDOException $exc) {
-            throw new Exception ("Falha ao realizar conexão com o banco de dados :(");
+            throw new Exception ("Falha ao realizar conexão com o banco de dados.");
         }
     }
 }

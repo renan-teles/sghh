@@ -1,8 +1,8 @@
-<?php
+<?php //sticky-top
 function showNavbar($active): void {
     echo (
         "
-        <nav class='navbar navbar-expand-md shadow-sm bg-light sticky-top'>
+        <nav class='navbar navbar-expand-md shadow-sm bg-light fixed-top'>
             <div class='container-lg'>
                
                 <a class='navbar-brand text-brown' href='./home.php'><span class='h3'>SGHH</span></a>

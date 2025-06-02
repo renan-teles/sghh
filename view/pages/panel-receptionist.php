@@ -25,7 +25,9 @@
     <div>
         <?php showNavbar("panel-receptionist"); ?>
 
-        <main class="container-lg mt-4">
+        <div class="invisible p-5"></div>
+
+        <div class="container-lg">
             <div class="col-12 bg-light rounded shadow-sm p-4">
                 <div class="row">
                     <div class="col-12 col-md text-center text-md-start">
@@ -88,7 +90,7 @@
                     </div>
                 </form>
             </div>
-        </main>
+        </div>
     </div>
 
     <!-- MODAL DELETE USER -->

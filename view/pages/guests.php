@@ -25,11 +25,13 @@
 
     <?php showNavbar("guests"); ?>
 
-    <div class="container-lg mt-4">
+    <div class="invisible p-5"></div>
+    
+    <div class="container-lg">
         <div class="col-12 shadow rounded p-4 bg-light mb-5">
             <div class="row mb-3">
                 <div class="col-12 col-md text-center text-md-start">
-                    <h2><i class="bi-people me-2"></i>Gestão de Hóspedes</h2>
+                    <h2 id="title-page"><i class="bi-people me-2"></i>Gestão de Hóspedes</h2>
                 </div>
                 <div class="col-12 col-md text-center text-md-end mt-2 mt-md-0">
                     <button class="btn text-ligth btn-brown" type="button" data-bs-target="#modalAddGuest" data-bs-toggle="modal">
@@ -130,8 +132,10 @@
         </div>
     </div>
 
+    <button id="btnTop" class="btn bg-light shadow-sm text-brown px-3 fs-2"><i class="bi-arrow-bar-up"></i></button>
+
     <!-- MODAL REGISTER GUEST -->
-    <div class="modal fade" id="modalAddGuest" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modalAddGuest" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
@@ -178,7 +182,7 @@
     </div>
 
      <!-- MODAL EDIT GUEST -->
-     <div class="modal fade" id="modalEditGuest" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+     <div class="modal fade" id="modalEditGuest" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">

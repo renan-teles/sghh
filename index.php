@@ -17,8 +17,7 @@
             <form id='form' action='controller/controllerReceptionist.php?act=login-receptionist' method='POST' class='col-12 col-sm-8 col-md-6 col-lg-5 bg-light p-4 shadow-lg rounded'>
                 <div class='mb-3 text-center'>
                     <h2 class="text-brown">SGHH</h2>
-                    <h5>Entrar Com Minha Conta</h5>
-                    <!-- <span>Sistema de Gestão de Hospedagem em Hotel</span> -->
+                    <h5>Entrar Com Conta de Recepcionista</h5>
                 </div>
                 <hr>
                 <div class='mb-3'>

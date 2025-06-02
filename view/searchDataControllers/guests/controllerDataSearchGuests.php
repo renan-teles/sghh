@@ -38,7 +38,6 @@ if($action === $actionsNames[0]){
 
     $complements = array_map(function ($value) {
         $value = trim($value);
-        $value = filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
         if (strpos($value, '(') !== false && strpos($value,')') !== false && strpos($value, '-') !== false){
             $value = preg_replace('/\D/', '', $value);

@@ -56,6 +56,25 @@ const calculateDiffDays = (start, end) => {
     return days >= 1 ? days : 1;
 }
 
+const windowOnScroll = (divSeach, btn) => {
+    window.onscroll = () => {
+        const offsetTop = divSeach.getBoundingClientRect().top;
+        if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) 
+        {
+          btn.style.display = "block";
+        } else {
+          btn.style.display = "none";
+        }
+        divSeach.classList.toggle("margin-on-top", offsetTop <= 0);
+    };
+    btn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });   
+    });
+}
+
 const inputCPF = () => {
     return ` 
         <div class="col-11">
@@ -582,6 +601,9 @@ document.querySelector("#btnCloseModalFormCreateAccommodations").addEventListene
         inputs[i].classList.remove('input-success');
     }
 
+    cpfGuests.quantCurr = 0;
+    cpfGuests.quantMax = 0;
+
     formCreateAccommodation.querySelector("#valueTotalDays").innerHTML = `R$0,00`;
 });
 
@@ -790,7 +812,7 @@ const atualizarCronometro = () => {
         btnCancel.innerHTML = `Cancelar`;
         btnCancel.classList.remove('disabled'); 
         btnCancel.addEventListener('click', () => {
-            btnCancel.innerHTML = "<div class='spinner-border spinner-border-sm me-2' role='status'><span class='visually-hidden'></span></div>Excluindo...";
+            btnCancel.innerHTML = "<div class='spinner-border spinner-border-sm me-2' role='status'><span class='visually-hidden'></span></div>Cancelando...";
         });
     }   
 }
@@ -811,3 +833,5 @@ if(btns){
         el.addEventListener('click', iniciar);
     });
 }
+
+windowOnScroll(document.querySelector("#title-page"), document.querySelector("#btnTop"));

@@ -97,6 +97,25 @@ const validateComplements = (selects) => {
     return aproved;
 }
 
+const windowOnScroll = (divSeach, btn) => {
+    window.onscroll = () => {
+        const offsetTop = divSeach.getBoundingClientRect().top;
+        if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) 
+        {
+          btn.style.display = "block";
+        } else {
+          btn.style.display = "none";
+        }
+        divSeach.classList.toggle("margin-on-top", offsetTop <= 0);
+    };
+    btn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });   
+    });
+}
+
 const writeFilter = (option, complementId) => {
     return ` 
          <div class='col-md-3 mb-3'>
@@ -529,3 +548,5 @@ if(btns){
         el.addEventListener('click', iniciar);
     });
 }
+
+windowOnScroll(document.querySelector("#title-page"), document.querySelector("#btnTop"));

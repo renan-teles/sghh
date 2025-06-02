@@ -17,7 +17,7 @@
             <form id='form' action='../../controller/controllerReceptionist.php?act=register-receptionist' method='POST' class='col-12 col-sm-8 col-md-6 col-lg-5 bg-light p-4 shadow rounded'>
                 <div class='mb-3 text-center'>
                     <h2 class="text-brown">SGHH</h2>
-                    <h5>Criar Conta de Acesso</h5>
+                    <h5>Criar Conta de Recepcionista</h5>
                 </div>
                 <hr>
                 <div class='mb-3'>
