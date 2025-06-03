@@ -21,7 +21,7 @@ create table guests(
     email varchar(60) not null unique,
     cpf char(11) not null unique,
     cpf_responsible char(11),
-    telephone char(11) not null unique,
+    telephone char(11) not null,
     date_birth date not null,
     primary key(id)
 )ENGINE = InnoDB;

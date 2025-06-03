@@ -49,14 +49,12 @@ class GuestDAO extends ClassDAO {
                         email = :email 
                     OR
                         cpf = :cpf
-                    OR telephone = :telephone 
                     LIMIT 1";
          
             $query = $pdo->prepare($sql);
             $query->bindParam(':name', $name);
             $query->bindParam(':email', $email);
             $query->bindParam(':cpf', $cpf);
-            $query->bindParam(':telephone', $telephone);
             
             $query->execute();
 

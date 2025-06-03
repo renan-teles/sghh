@@ -21,14 +21,14 @@
     <link rel="stylesheet" href="../assets/css/css_bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
-<body class="bg-brown">
+<body>
     <div>
         <?php showNavbar("panel-receptionist"); ?>
 
         <div class="invisible p-5"></div>
 
-        <div class="container-lg">
-            <div class="col-12 bg-light rounded shadow-sm p-4">
+        <div class="container-lg mt-3">
+            <div class="col-12 px-2 px-sm-5 mb-5 pb-3">
                 <div class="row">
                     <div class="col-12 col-md text-center text-md-start">
                         <h2><i class='bi-person-vcard me-2'></i>Minhas Informações</h2>

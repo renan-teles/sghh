@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SGHH</title>
+    <title>SGHH - Login</title>
     <link rel="stylesheet" href="view/assets/css/css_bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="view/assets/css/style.css">
 </head>
@@ -36,7 +36,7 @@
                 <hr>
                 <div>
                     <button type='submit' class='btn btn-brown col-12 mb-1'>Entrar</button>
-                    <a href='view/pages/register-receptionist.php' class='btn btn col-12'>Criar Minha Conta</a>
+                    <a href='view/pages/register-receptionist.php' class='btn btn col-12'>Criar Conta de Recepcionista</a>
                 </div>
             </form>
         </main>
