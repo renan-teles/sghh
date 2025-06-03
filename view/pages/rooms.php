@@ -21,14 +21,13 @@
     <link rel="stylesheet" href="../assets/css/css_bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
-<body class="bg-brown">
-
+<body>
     <?php showNavbar("rooms"); ?>
 
     <div class="invisible p-5"></div>
 
-    <div class="container-lg">
-        <div class="col-12 shadow rounded p-4 bg-light mb-5">
+    <div class="container-lg mt-3">
+        <div class="col-12 px-2 px-sm-5 mb-5 pb-3">
             <div class="row mb-3">
                 <div class="col-12 col-md text-center text-md-start">
                     <h2 id="title-page"><i class="bi-building me-2"></i>Gestão de Quartos</h2>
@@ -116,9 +115,12 @@
                                         <td id='viewSearchAvailabilityRoom'><?= ucfirst(strtolower($r["availability_room"])); ?></td>
                                         <td id='viewSearchFloorRoom'><?= $r["floor"]; ?></td>
                                         <td>
-                                            <?php if($r['availability_room'] !== 'ocupado'): ?>
+                                            <?php if(strtolower($r['availability_room']) !== 'ocupado'): ?>
                                                 <button id='tr_<?=$r["id"];?>' class='btn btn-secondary btn-sm btn btnOpenModalEdit my-1 my-md-0' type='button' data-bs-target='#modalEditRoom' data-bs-toggle='modal'><i id='tr_<?=$r["id"];?>' class='bi-pencil-fill'></i></button>
                                                 <button id='tr_<?=$r["id"];?>' class='btn btn-danger btn-sm btnOpenModalDelete my-1 my-md-0' type='button' data-bs-target='#modalDeleteRoom' data-bs-toggle='modal'><i id='tr_<?=$r["id"];?>' class='bi-trash-fill'></i></button>
+                                            <?php endif; ?>
+                                            <?php if(strtolower($r['availability_room']) === 'ocupado'): ?>
+                                                Indiponíveis
                                             <?php endif; ?>
                                         </td>
                                     </tr>

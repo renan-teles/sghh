@@ -28,9 +28,11 @@
 
     <?php showNavbar("home"); ?>
 
-    <div class="container-lg">
+    <div class="invisible p-5 p-lg-3"></div>
+
+    <div class="container-xl">
         <div class="row justify-content-center align-items-center" style="height: 100dvh;">
-            <div class="col d-flex justify-content-center mb-3">
+            <div class="col-12 col-lg-4 d-flex justify-content-center mb-3">
                 <div class="card shadow-lg" style="width: 20rem;">
                     <img src="../assets/img/calendario.png" class="card-img-top w-25 ms-auto me-auto mt-3" alt="...">
                     <div class="card-body text-center shadow-lg">
@@ -43,7 +45,7 @@
                 </div>
             </div>
             
-            <div class="col d-flex justify-content-center mb-3">
+            <div class="col-12 col-lg-4 d-flex justify-content-center mb-3">
                 <div class="card shadow-lg" style="width: 20rem;">
                     <img src="../assets/img/hospede.png" class="card-img-top ms-auto me-auto mt-3" alt="..." style="width: 80px;">
                     <div class="card-body text-center shadow-lg">
@@ -56,7 +58,7 @@
                 </div>
             </div>
             
-            <div class="col d-flex justify-content-center mb-3">
+            <div class="col-12 col-lg-4 d-flex justify-content-center mb-3">
                 <div class="card mb-5 mb-lg-0 shadow-lg" style="width: 20rem;">
                     <img src="../assets/img/quarto.png" class="card-img-top w-25 ms-auto me-auto mt-3" alt="...">
                     <div class="card-body text-center shadow-lg">

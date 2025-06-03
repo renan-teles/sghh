@@ -1,8 +1,8 @@
-<?php
+<?php //sticky-top
 function showNavbar($active): void {
     echo (
         "
-        <nav class='navbar navbar-expand-md shadow-sm bg-light fixed-top'>
+        <nav class='navbar navbar-expand-lg shadow-sm bg-light fixed-top'>
             <div class='container-lg'>
                
                 <a class='navbar-brand text-brown' href='./home.php'><span class='h3'>SGHH</span></a>
@@ -28,7 +28,7 @@ function showNavbar($active): void {
                     <li class='nav-item me-md-2 mb-3 mb-md-0'>
                         <a class='nav-link ". ($active === "panel-receptionist"? "active" : "") ."' href='./panel-receptionist.php'><i class='bi-person-vcard me-1'></i>Painel</a>
                     </li>
-                    <li class='nav-item ms-md-2 ms-auto'>
+                    <li class='nav-item ms-lg-2 ms-auto'>
                         <a class='btn btn-danger' href='../../controller/controllerReceptionist.php?act=logout-receptionist'><i class='bi-box-arrow-in-left me-1'></i>Sair</a>
                     </li>
                 </ul>

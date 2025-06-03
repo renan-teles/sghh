@@ -83,4 +83,5 @@
     right: 20px;
     z-index: 99;
     cursor: pointer;
+    border: 1px solid #b78f61!important;
 }

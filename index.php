@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SGHH</title>
+    <title>SGHH - Login</title>
     <link rel="stylesheet" href="view/assets/css/css_bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="view/assets/css/style.css">
 </head>
@@ -17,8 +17,7 @@
             <form id='form' action='controller/controllerReceptionist.php?act=login-receptionist' method='POST' class='col-12 col-sm-8 col-md-6 col-lg-5 bg-light p-4 shadow-lg rounded'>
                 <div class='mb-3 text-center'>
                     <h2 class="text-brown">SGHH</h2>
-                    <h5>Entrar Com Minha Conta</h5>
-                    <!-- <span>Sistema de Gestão de Hospedagem em Hotel</span> -->
+                    <h5>Entrar Com Conta de Recepcionista</h5>
                 </div>
                 <hr>
                 <div class='mb-3'>
@@ -37,7 +36,7 @@
                 <hr>
                 <div>
                     <button type='submit' class='btn btn-brown col-12 mb-1'>Entrar</button>
-                    <a href='view/pages/register-receptionist.php' class='btn btn col-12'>Criar Minha Conta</a>
+                    <a href='view/pages/register-receptionist.php' class='btn btn col-12'>Criar Conta de Recepcionista</a>
                 </div>
             </form>
         </main>

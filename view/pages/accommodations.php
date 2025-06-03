@@ -22,13 +22,13 @@
     <link rel="stylesheet" href="../assets/css/css_bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
-<body class="bg-brown">
+<body>
     <?php showNavbar("accommodations"); ?>
 
     <div class="invisible p-5"></div>
     
-    <div class="container-lg">
-        <div class="col-12 shadow rounded p-4 bg-light mb-5">
+    <div class="container-lg mt-3">
+        <div class="col-12 px-2 px-sm-5 mb-5 pb-3">
             <div class="row mb-3">
                 <div class="col-12 col-md text-center text-md-start">
                     <h2 id="title-page"><i class="bi-calendar-week me-2"></i>Gestão de Hospedagens</h2>
@@ -40,7 +40,7 @@
             <?php showMessage(); ?>
 
             <div class="col-12 my-4">
-                <h5><i class='bi-search me-1'></i>Área de Pesquisa:</h5>
+                <h5><i class='bi-search me-2'></i>Área de Pesquisa:</h5>
             </div>
 
             <!-- SEARCH ROOMS -->
@@ -124,14 +124,14 @@
             <hr>
 
             <div class="col-12 my-4">
-                <h5><i class="bi-eye me-1"></i>Área de Visualização:</h5>
+                <h5><i class="bi-eye me-2"></i>Área de Visualização:</h5>
             </div>
 
             <!-- VIEW ROOMS -->
             <div class="accordion mb-2" id="accordionViewRooms">
                 <div class="accordion-item">
                     <h2 class="accordion-header">
-                        <button class="accordion-button collapsed bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo3" aria-expanded="false" aria-controls="collapseTwo3">
+                        <button class="accordion-button bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo3" aria-expanded="false" aria-controls="collapseTwo3">
                             <i class='bi-building me-1'></i>Quartos Pesquisados:
                         </button>
                     </h2>
@@ -176,7 +176,7 @@
                                     </div>
                                 <?php endif ?>
                                 <?php if(!$rooms): ?>
-                                    <h5 class='mb-3'>Nenhum quarto pesquisado ou encontrado.</h5>
+                                    <h6>Nenhum quarto pesquisado ou encontrado.</h6>
                                 <?php endif; ?>    
                             </div>  
                         </div>
@@ -188,7 +188,7 @@
             <div class="accordion mt-3" id="accordionViewAccommodations">
                 <div class="accordion-item">
                     <h2 class="accordion-header">
-                        <button class="accordion-button collapsed bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo4" aria-expanded="false" aria-controls="collapseTwo4">
+                        <button class="accordion-button bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo4" aria-expanded="false" aria-controls="collapseTwo4">
                             <i class='bi-calendar-week me-1'></i>Hospedagens Pesquisadas:
                         </button>
                     </h2>
@@ -267,7 +267,7 @@
                                     </div>
                                 <?php endif ?>
                                 <?php if(!$accommodations): ?>
-                                    <h5>Nenhuma hospedagem pesquisada ou encontrada.</h5>
+                                    <h6>Nenhuma hospedagem pesquisada ou encontrada.</h6>
                                 <?php endif; ?>
                             </div>
                         </div>
