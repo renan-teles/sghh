@@ -79,7 +79,7 @@ const inputCPF = () => {
     return ` 
         <div class="col-11">
             <label for="cpf_guest">CPF do Hóspede:</label>
-            <input type="text" name="cpf_guests[]" id="cpf_guest" placeholder="Digite o CPF do hóspede..." class="form-control cpfGuests">
+            <input type="text" name="cpf_guests[]" id="cpf_guest" value="146.168.920-16" placeholder="Digite o CPF do hóspede..." class="form-control cpfGuests">
         </div>
         <div class="col-1 d-flex justify-content-center align-items-center">
             <button class="btn btn text-danger btn-remove-cpf-guest mt-4 me-2" type="button"><i class="bi-trash-fill"></i></button>

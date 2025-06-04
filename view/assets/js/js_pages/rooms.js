@@ -293,6 +293,14 @@ const dailyPriceRoomFormRegisterRoom = formRegisterRoom.querySelector("#daily_pr
 const typeRoomFormRegisterRoom = formRegisterRoom.querySelector("#type_room");
 const availabiliyRoomFormRegisterRoom = formRegisterRoom.querySelector("#availability_room");
 
+/* Changes To The Presentation */
+numberRoomFormRegisterRoom.value = "100";
+floorRoomFormRegisterRoom.value = "1";
+capacityRoomFormRegisterRoom.value = "5";
+dailyPriceRoomFormRegisterRoom.value = "150,00";
+typeRoomFormRegisterRoom.value = "1";
+typeRoomFormRegisterRoom.value = "1";
+
 formRegisterRoom.addEventListener('submit', (evt) => {
     evt.preventDefault();
     

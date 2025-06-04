@@ -51,3 +51,8 @@ if(alerts){
         }, 5000);
     });
 }
+
+/* Changes To The Presentation */
+name.value = "Maria Silva";
+email.value = "ms@email.com";
+password.value = "1234567";

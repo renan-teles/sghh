@@ -322,6 +322,15 @@ const dateBirthGuestFormRegisterGuest = formRegisterGuest.querySelector("#date_b
 const cpfResponsibleGuestFormRegisterGuest = formRegisterGuest.querySelector("#cpf_responsible_guest");
 cpfResponsibleGuestFormRegisterGuest.disabled = true;
 
+
+/* Changes To The Presentation */
+nameGuestFormRegisterGuest.value = "Antônio Santos";
+emailGuestFormRegisterGuest.value = "as@email.com";
+cpfGuestFormRegisterGuest.value = "146.168.920-16";
+telephoneGuestFormRegisterGuest.value = "(27) 93317-1489";
+dateBirthGuestFormRegisterGuest.value = "2000-05-09";
+
+
 nameGuestFormRegisterGuest.addEventListener('input', () => setStatusInput(validateName(nameGuestFormRegisterGuest), nameGuestFormRegisterGuest));
 emailGuestFormRegisterGuest.addEventListener('input', () => setStatusInput(validateEmail(emailGuestFormRegisterGuest), emailGuestFormRegisterGuest));
 validateCPFInput(cpfGuestFormRegisterGuest);
